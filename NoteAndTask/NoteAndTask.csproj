@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Include="client-app\src\components\layout\AddNewListModal.js" />
+    <Content Include="client-app\src\components\SignUp.jsx" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="BViews\Account\ChangeEmail.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\ChangeLogo.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\ChangeName.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\ChangePassword.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\ChangePhoneNumber.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\ConfirmPhoneNumberChange.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\Login.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\Register.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Account\Settings.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Home\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Home\Privacy.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Note\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Note\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Shared\Error.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Shared\_CookieConsentPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Shared\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Shared\_NTLayout.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Shared\_ValidationScriptsPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Task\Archive.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Task\CreateTask.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Task\CreateTaskList.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Task\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Task\Lists.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\Task\Tasks.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="BViews\_ViewStart.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\main\site.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\56757.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\960px-User.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\user.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\main\main-page.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot" />
+  </ItemGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES2015</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+
+</Project>

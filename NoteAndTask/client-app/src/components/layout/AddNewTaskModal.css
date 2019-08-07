@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+    .ReactModal__Content {
+        width: 95vw;
+    }
+}
+
+@media (min-width: 768px) {
+    .ReactModal__Content {
+        width: 50vw;
+    }
+}

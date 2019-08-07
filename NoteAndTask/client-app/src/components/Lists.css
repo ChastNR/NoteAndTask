@@ -1,0 +1,22 @@
+.task-list {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 0.9em;
+    margin: 5px;
+}
+
+.task-list a {
+    color: gray;
+    text-decoration: none;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all  0.5s ease;
+    -o-transition: all  0.5s ease;
+    transition: all  0.5s ease;
+}
+
+.task-list a:hover {
+    color: #591df1;
+    /*font-size: 1.1em;*/
+    /*font-weight: bold;*/
+}
