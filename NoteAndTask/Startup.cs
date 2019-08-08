@@ -10,9 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NoteAndTask.Data;
 using NoteAndTask.Extensions;
 using NoteAndTask.Extensions.EmailSender;
+using Repository.Context;
+using Repository.Interface;
+using Repository.Repositories;
 
 namespace NoteAndTask
 {
@@ -46,16 +48,23 @@ namespace NoteAndTask
 
             #region DbContext
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            // services.AddDbContext<ApplicationDbContext>(options =>
+            // {
+            //     options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
+            // });
+
+            services.AddDbContext<ApplicationContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
             });
+            services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
+
 
             #endregion
 
             #region Authentication
-            
-            
+
+
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
             var authConfig = Configuration.GetSection("AuthOptions").Get<AuthOptions>();

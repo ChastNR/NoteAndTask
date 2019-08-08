@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NoteAndTask.Data;
-using NoteAndTask.Data.Entities;
+using Repository.Interface;
+using Repository.Models;
 
 namespace NoteAndTask.Controllers
 {
@@ -14,97 +13,116 @@ namespace NoteAndTask.Controllers
     [Authorize]
     public class TaskController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IRepository _repository;
 
-        public TaskController(ApplicationDbContext db) => _db = db;
-
-//        [Route("lists")]
-//        [HttpGet]
+        public TaskController(IRepository repository) => _repository = repository;
+        
         [HttpGet("lists")]
-        public IEnumerable<TaskList> Lists() => _db.TaskLists.Where(u => u.UserId == User.Identity.Name)
+        public IEnumerable<TaskList> Lists() => _repository.GetAll<TaskList>()
+            .Where(u => u.UserId == User.Identity.Name)
             .OrderByDescending(c => c.CreationDate).ToList();
-
-//        [Route("tasks")]
-//        [HttpGet]
+        
         [HttpGet("tasks")]
         public IEnumerable<TaskEntity> Tasks(string id, bool archived)
         {
-            var tasks = _db.Tasks;
+            var tasks = _repository.Get<TaskEntity>();
 
             if (id != null)
             {
-                return tasks.Where(l => l.TaskListId == id && !l.IsDone && l.UserId == User.Identity.Name).ToList();
+                return tasks.Where(l => l.TaskListId == id && !l.IsDone && l.UserId == User.Identity.Name);
             }
 
             if (archived)
             {
-                return tasks.AsNoTracking().Where(t => t.IsDone && t.UserId == User.Identity.Name).ToList();
+                return tasks.Where(t => t.IsDone && t.UserId == User.Identity.Name);
             }
 
-            return tasks.Where(t => t.UserId == User.Identity.Name && !t.IsDone && t.TaskListId == null).ToList();
+            return tasks.Where(t => t.UserId == User.Identity.Name && !t.IsDone && t.TaskListId == null);
         }
 
         [Route("addNewList")]
         [HttpPost]
         public async Task<IActionResult> AddNewList(string name)
         {
-            _db.TaskLists.Add(new TaskList
+            if (string.IsNullOrEmpty(name))
+                return StatusCode(400, ("Cant add list with empty name ({0}) ", name));
+            
+            try
             {
-                Name = name,
-                UserId = User.Identity.Name
-            });
-            await _db.SaveChangesAsync();
+                _repository.Create(new TaskList
+                {
+                    Name = name,
+                    UserId = User.Identity.Name
+                });
+                await _repository.SaveAsync();
 
-            return Ok("Task list added!");
+                return Ok(("Task list '{0}' added!", name));
+            }
+            catch (Exception e)
+            {
+                return Json(("Error: {0}",e));
+            }
         }
-
-//        [Route("addNewTask")]
-//        [HttpPost]
+        
         [HttpPost("addNewTask")]
         public async Task<IActionResult> AddNewTask([FromBody] TaskEntity task)
         {
-            task.UserId = User.Identity.Name;
-            _db.Tasks.Add(task);
-            await _db.SaveChangesAsync();
+            if(!ModelState.IsValid) 
+                return StatusCode(400, ("Cant add task (id: {0}, name: {1}", task.Id, task.Name));
+                
+            try
+            {
+                task.UserId = User.Identity.Name;
+                _repository.Create(task);
+                await _repository.SaveAsync();
 
-            return Ok("Task added! " + task.Name);
+                return Ok("Task added! " + task.Name);
+            }
+            catch(Exception e)
+            {
+                return Json(("Error: {0}", e));
+            }
         }
-        
-//         [HttpGet("taskDone")]
-//        public async Task<IActionResult> TaskDone(string id)
-//        {
-//            if (!string.IsNullOrEmpty(id)) return NotFound("There is no task with id: " + id);
-//
-//            //var task = _db.Tasks.Find(id);
-//            var task = _db.Tasks.FirstOrDefault(t => t.TaskId == id);
-//            if (task == null) return NotFound("There is no task with id: " + id);
-//            task.IsDone = true;
-//            await _db.SaveChangesAsync();
-//
-//            return Ok("Task (Name: " + task.Name + ") moved to archive successfully!");
-//        }
         
         [HttpGet("taskDone")]
         public async Task<IActionResult> TaskDone(string id)
         {
-            var task = _db.Tasks.Find(id);
-            task.IsDone = true;
-            await _db.SaveChangesAsync();
+            if (string.IsNullOrEmpty(id))
+                return StatusCode(409, ("Cant add task (id: {0}) to archive", id));
 
-            return Ok("Task (Name: " + task.Name + ") moved to archive successfully!");
+            try
+            {
+                var task = _repository.GetById<TaskEntity>(id);
+                task.IsDone = true;
+                await _repository.SaveAsync();
+
+                return Ok(("Task (id: {0}, name: {1}) moved to archive successfully", id, task.Name));
+            }
+            catch (Exception e)
+            {
+                return Json(("Error: {0}", e));
+            }
         }
 
         [HttpGet("deleteTaskList")]
         public async Task<IActionResult> DeleteTaskList(string id)
         {
-            if (!string.IsNullOrEmpty(id)) return NotFound("There is no list with id: " + id);
+            if (string.IsNullOrEmpty(id))
+                return NotFound("There is no list with id: " + id);
 
-            var list = _db.TaskLists.Find(id);
-            _db.Remove(list);
+            try
+            {
+                var list = _repository.GetById<TaskList>(id);
+                _repository.Delete(list);
 
-            await _db.SaveChangesAsync();
+                await _repository.SaveAsync();
 
-            return Ok("List (Name: " + list.Name + ") removed successfully!");
+                return Ok(("List (id: {0}, name: {1}) removed successfully!", id, list.Name));
+            }
+            catch (Exception e)
+            {
+                return Json(("Error: {0}", e));
+            }
         }
     }
 }

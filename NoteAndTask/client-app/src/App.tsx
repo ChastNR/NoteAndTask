@@ -2,7 +2,6 @@ import React from 'react';
 import {Route, Switch} from 'react-router';
 import {Tasks} from "./components/Tasks";
 import {Archive} from "./components/Archive";
-import {BoardLayout} from "./components/layout/BoardLayout";
 import {AuthLayout} from "./components/layout/AuthLayout";
 import {SignIn} from "./components/SignIn";
 import {SignUp} from "./components/SignUp";
@@ -21,10 +20,8 @@ const App: React.FC = () => {
             <Route path='/signup' component={SignUp}/>
             <Route path='/archive' component={Archive}/>
             <Route path='/notes' component={Notes}/>
-            <Route path='/board' component={BoardLayout}/>
             <Route path='/dashboard' component={DashBoard} />
             <Route path='/lists' component={Lists} />
-            {/*<Route path='/board/:lists' component={BoardLayout}/>*/}
             <Route path='/settings' component={Settings}/>
         </Switch>
     );

@@ -24,7 +24,6 @@ export class SignIn extends React.Component {
             {
                 if(data) {
                     localStorage.setItem("token", data);
-                    // this.props.history.push("/board");
                     this.props.history.push("/dashboard");
                 }
             })

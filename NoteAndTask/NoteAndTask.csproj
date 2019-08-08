@@ -61,7 +61,7 @@
 
 
   <ItemGroup>
-    <Folder Include="wwwroot" />
+    <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
 
