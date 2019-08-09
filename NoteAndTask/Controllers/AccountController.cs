@@ -30,8 +30,9 @@ namespace NoteAndTask.Controllers
             _appEnvironment = appEnvironment;
             _emailSender = emailSender;
         }
-
-        [HttpGet("getUser")]
+        
+        [HttpGet]
+        [Route("getUser")]
         public IActionResult GetUser()
         {
             var user = _repository.GetById<User>(User.Identity.Name);
@@ -44,7 +45,8 @@ namespace NoteAndTask.Controllers
             });
         }
 
-        [HttpPost("changeName")]
+        [HttpPost]
+        [Route("changeName")]
         public async Task<IActionResult> ChangeName(string oldName, string name)
         {
             if (string.IsNullOrEmpty(oldName) || string.IsNullOrEmpty(name))
@@ -71,7 +73,8 @@ namespace NoteAndTask.Controllers
             }
         }
 
-        [HttpPost("changePassword")]
+        [HttpPost]
+        [Route("changePassword")]
         public async Task<IActionResult> ChangePassword(string oldPassword, string password, string passwordCompare)
         {
             var user = _repository.GetById<User>(User.Identity.Name);
@@ -92,8 +95,9 @@ namespace NoteAndTask.Controllers
                 return Json(("Error: {0}", e));
             }
         }
-
-        [HttpGet("changeEmailAddress")]
+        
+        [HttpGet]
+        [Route("changeEmailAddress")]
         public async Task<IActionResult> ChangeEmailAddress(string oldEmail, string email)
         {
             var user = _repository.GetById<User>(User.Identity.Name);

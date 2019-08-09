@@ -1,8 +1,6 @@
 import React from "react";
 import {request} from "../../libs/api";
 import {Link} from "react-router-dom";
-import {Accordion, Button} from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
 import "./Dashboard.css";
 import {Footer} from "./Footer";
 import brandLogo from "../../images/brand-icon.png";
@@ -35,21 +33,7 @@ export class DashBoard extends React.Component {
             });
         }
     }
-
-    handleClick = () => {
-        let wrapper = document.getElementById("wrapper");
-        if (wrapper.classList.contains("toggled")) {
-            wrapper.classList.remove("toggled");
-        } else {
-            wrapper.classList.add("toggled");
-        }
-    };
-
-    static logOut() {
-        localStorage.removeItem("token");
-        window.location.href = "/";
-    }
-
+    
     render() {
         return (
             <div>

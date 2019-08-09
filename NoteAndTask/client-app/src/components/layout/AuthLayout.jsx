@@ -15,16 +15,16 @@ export class AuthLayout extends React.Component {
       user: null
     };
 
-    this.getUser();
+    //this.getUser();
   }
 
-  getUser() {
-    if (this.state.user == null && localStorage.getItem("token")) {
-      request("/api/account/getUser").then(data => {
-        this.setState({ user: data["name"] });
-      });
-    }
-  }
+  // getUser() {
+  //   if (this.state.user == null && localStorage.getItem("token")) {
+  //     request("/api/account/getUser").then(data => {
+  //       this.setState({ user: data["name"] });
+  //     });
+  //   }
+  // }
 
   renderAuthPanel() {
     if (localStorage.getItem("token")) {

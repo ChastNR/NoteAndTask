@@ -17,12 +17,14 @@ namespace NoteAndTask.Controllers
 
         public TaskController(IRepository repository) => _repository = repository;
         
-        [HttpGet("lists")]
+        [HttpGet]
+        [Route("lists")]
         public IEnumerable<TaskList> Lists() => _repository.GetAll<TaskList>()
             .Where(u => u.UserId == User.Identity.Name)
             .OrderByDescending(c => c.CreationDate).ToList();
         
-        [HttpGet("tasks")]
+        [HttpGet]
+        [Route("tasks")]
         public IEnumerable<TaskEntity> Tasks(string id, bool archived)
         {
             var tasks = _repository.Get<TaskEntity>();
@@ -40,8 +42,9 @@ namespace NoteAndTask.Controllers
             return tasks.Where(t => t.UserId == User.Identity.Name && !t.IsDone && t.TaskListId == null);
         }
 
-        [Route("addNewList")]
+        
         [HttpPost]
+        [Route("addNewList")]
         public async Task<IActionResult> AddNewList(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -64,7 +67,8 @@ namespace NoteAndTask.Controllers
             }
         }
         
-        [HttpPost("addNewTask")]
+        [HttpPost]
+        [Route("addNewTask")]
         public async Task<IActionResult> AddNewTask([FromBody] TaskEntity task)
         {
             if(!ModelState.IsValid) 
@@ -84,7 +88,8 @@ namespace NoteAndTask.Controllers
             }
         }
         
-        [HttpGet("taskDone")]
+        [HttpGet]
+        [Route("taskDone")]
         public async Task<IActionResult> TaskDone(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -103,8 +108,9 @@ namespace NoteAndTask.Controllers
                 return Json(("Error: {0}", e));
             }
         }
-
-        [HttpGet("deleteTaskList")]
+        
+        [HttpGet]
+        [Route("deleteTaskList")]
         public async Task<IActionResult> DeleteTaskList(string id)
         {
             if (string.IsNullOrEmpty(id))

@@ -3,7 +3,7 @@ export const request = async (url, method = "get", data) => {
         method,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("token")
+            'Authorization': 'Bearer' + localStorage.getItem("token")
         },
         body: data
     }).then(response => {
@@ -16,3 +16,8 @@ export const request = async (url, method = "get", data) => {
         }
     })
 };
+
+export const logOut = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+}

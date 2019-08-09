@@ -31,7 +31,8 @@ namespace NoteAndTask.Controllers
             AuthOptions = authOptions.Value;
         }
         
-        [HttpPost("signin")]
+        [HttpPost]
+        [Route("signin")]
         public async Task<IActionResult> SignIn([FromBody] LoginViewModel model)
         {
             if (model.Password != model.ConfirmPassword)
@@ -63,7 +64,8 @@ namespace NoteAndTask.Controllers
             }
         }
 
-        [HttpPost("signup")]
+        [HttpPost]
+        [Route("signup")]
         public async Task<IActionResult> SignUp([FromBody] RegisterViewModel model)
         {
             if (_repository.GetFirst<User>(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email) != null)
@@ -98,15 +100,17 @@ namespace NoteAndTask.Controllers
                 new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthOptions.SecurityKey)),
                     SecurityAlgorithms.HmacSha256Signature);
 
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, id)
+            };
+            
             var token = new JwtSecurityToken(
                 issuer: AuthOptions.Issuer,
                 audience: AuthOptions.Audience,
                 expires: DateTime.Now.AddMinutes(AuthOptions.LifeTime),
                 signingCredentials: signingCredentials,
-                claims: new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, id)
-                }
+                claims: claims
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
