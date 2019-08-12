@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Text;
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NoteAndTask.Extensions;
 using NoteAndTask.Extensions.EmailSender;
+using NoteAndTask.GraphQL;
 using Repository.Context;
 using Repository.Interface;
 using Repository.Repositories;
@@ -37,14 +41,14 @@ namespace NoteAndTask
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            #endregion
+            #endregion CookiePolicy
 
             #region EmailSender
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailSender, EmailSender>();
 
-            #endregion
+            #endregion EmailSender
 
             #region DbContext
 
@@ -54,7 +58,35 @@ namespace NoteAndTask
             });
             services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
 
-            #endregion
+            #endregion DbContext
+
+            #region GraphQL
+
+            services.AddScoped<IDependencyResolver>(ServiceProviderServiceExtensions =>
+                new FuncDependencyResolver(ServiceProviderServiceExtensions.GetRequiredService));
+
+            services.AddScoped<NatSchema>();
+
+            services.AddGraphQL(x =>
+            {
+                x.ExposeExceptions = true; //set true only in development mode. make it switchable.
+            })
+            .AddGraphTypes(ServiceLifetime.Scoped);
+
+
+            #endregion GraphQL
+
+            #region GraphQlAuthorization
+
+            services.AddGraphQL(x =>
+            {
+                x.ExposeExceptions = true;
+            })
+.AddGraphTypes(ServiceLifetime.Scoped)
+.AddUserContextBuilder(httpContext => httpContext.User)
+.AddDataLoader();
+
+            #endregion GraphQlAuthorization
 
             #region Authentication
 
@@ -83,7 +115,9 @@ namespace NoteAndTask
                     };
                 });
 
-            #endregion
+            #endregion Authentication
+
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client-app/build"; });
@@ -98,15 +132,18 @@ namespace NoteAndTask
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                //app.UseHsts();
+                app.UseHsts();
             }
 
             app.UseAuthentication();
 
             //app.UseStaticFiles();
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseGraphQL<NatSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
 
             #region UseMvc
 
