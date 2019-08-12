@@ -48,22 +48,15 @@ namespace NoteAndTask
 
             #region DbContext
 
-            // services.AddDbContext<ApplicationDbContext>(options =>
-            // {
-            //     options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
-            // });
-
             services.AddDbContext<ApplicationContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
             });
             services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
 
-
             #endregion
 
             #region Authentication
-
 
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 

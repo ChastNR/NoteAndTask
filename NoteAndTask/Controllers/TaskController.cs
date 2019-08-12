@@ -16,18 +16,15 @@ namespace NoteAndTask.Controllers
         private readonly IRepository _repository;
 
         public TaskController(IRepository repository) => _repository = repository;
-        
+
+        [Route("get")]
         [HttpGet]
-        [Route("lists")]
-        public IEnumerable<TaskList> Lists() => _repository.GetAll<TaskList>()
-            .Where(u => u.UserId == User.Identity.Name)
-            .OrderByDescending(c => c.CreationDate).ToList();
-        
-        [HttpGet]
-        [Route("tasks")]
-        public IEnumerable<TaskEntity> Tasks(string id, bool archived)
+        public IEnumerable<TaskEntity> Get(string id, bool archived) => GetTasks(id, archived);
+
+        #region GetTasks
+        private IEnumerable<TaskEntity> GetTasks(string id, bool archived)
         {
-            var tasks = _repository.Get<TaskEntity>();
+            var tasks = _repository.GetAll<TaskEntity>();
 
             if (id != null)
             {
@@ -41,39 +38,12 @@ namespace NoteAndTask.Controllers
 
             return tasks.Where(t => t.UserId == User.Identity.Name && !t.IsDone && t.TaskListId == null);
         }
+        #endregion GetTasks
 
-        
+        [Route("add")]
         [HttpPost]
-        [Route("addNewList")]
-        public async Task<IActionResult> AddNewList(string name)
+        public async Task<IActionResult> Add([FromBody] TaskEntity task)
         {
-            if (string.IsNullOrEmpty(name))
-                return StatusCode(400, ("Cant add list with empty name ({0}) ", name));
-            
-            try
-            {
-                _repository.Create(new TaskList
-                {
-                    Name = name,
-                    UserId = User.Identity.Name
-                });
-                await _repository.SaveAsync();
-
-                return Ok(("Task list '{0}' added!", name));
-            }
-            catch (Exception e)
-            {
-                return Json(("Error: {0}",e));
-            }
-        }
-        
-        [HttpPost]
-        [Route("addNewTask")]
-        public async Task<IActionResult> AddNewTask([FromBody] TaskEntity task)
-        {
-            if(!ModelState.IsValid) 
-                return StatusCode(400, ("Cant add task (id: {0}, name: {1}", task.Id, task.Name));
-                
             try
             {
                 task.UserId = User.Identity.Name;
@@ -82,18 +52,18 @@ namespace NoteAndTask.Controllers
 
                 return Ok("Task added! " + task.Name);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return Json(("Error: {0}", e));
+                return Json("Error: " + e);
             }
         }
-        
+
+        [Route("done")]
         [HttpGet]
-        [Route("taskDone")]
-        public async Task<IActionResult> TaskDone(string id)
+        public async Task<IActionResult> Done(string id)
         {
             if (string.IsNullOrEmpty(id))
-                return StatusCode(409, ("Cant add task (id: {0}) to archive", id));
+                return BadRequest("Cant add task (id: " + id + ") to archive");
 
             try
             {
@@ -101,33 +71,11 @@ namespace NoteAndTask.Controllers
                 task.IsDone = true;
                 await _repository.SaveAsync();
 
-                return Ok(("Task (id: {0}, name: {1}) moved to archive successfully", id, task.Name));
+                return Ok("Task (id: " + id + ", name: " + task.Name + ") moved to archive successfully");
             }
             catch (Exception e)
             {
-                return Json(("Error: {0}", e));
-            }
-        }
-        
-        [HttpGet]
-        [Route("deleteTaskList")]
-        public async Task<IActionResult> DeleteTaskList(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                return NotFound("There is no list with id: " + id);
-
-            try
-            {
-                var list = _repository.GetById<TaskList>(id);
-                _repository.Delete(list);
-
-                await _repository.SaveAsync();
-
-                return Ok(("List (id: {0}, name: {1}) removed successfully!", id, list.Name));
-            }
-            catch (Exception e)
-            {
-                return Json(("Error: {0}", e));
+                return Json("Error: " + e);
             }
         }
     }

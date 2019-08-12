@@ -1,10 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using NoteAndTask.Extensions.EmailSender;
 using NoteAndTask.Models.ViewModels;
 using Repository.Interface;
 using Repository.Models;
@@ -16,23 +13,11 @@ namespace NoteAndTask.Controllers
     public class AccountController : Controller
     {
         private readonly IRepository _repository;
-        private readonly IHostingEnvironment _appEnvironment;
-        private readonly IEmailSender _emailSender;
 
-        public AccountController
-        (
-            IRepository repository,
-            IHostingEnvironment appEnvironment,
-            IEmailSender emailSender
-            )
-        {
-            _repository = repository;
-            _appEnvironment = appEnvironment;
-            _emailSender = emailSender;
-        }
-        
+        public AccountController(IRepository repository) => _repository = repository;
+
+        [Route("getuser")]
         [HttpGet]
-        [Route("getUser")]
         public IActionResult GetUser()
         {
             var user = _repository.GetById<User>(User.Identity.Name);
@@ -45,13 +30,13 @@ namespace NoteAndTask.Controllers
             });
         }
 
+        [Route("changename")]
         [HttpPost]
-        [Route("changeName")]
         public async Task<IActionResult> ChangeName(string oldName, string name)
         {
             if (string.IsNullOrEmpty(oldName) || string.IsNullOrEmpty(name))
             {
-                return Json(("Please check written data (old name: {0}, new name: {1})", oldName, name));
+                return Json("Please check written data (old name: " + oldName + ", new name: " + name + ")");
             }
 
             try
@@ -62,19 +47,19 @@ namespace NoteAndTask.Controllers
                 {
                     return BadRequest("Please, check written name");
                 }
-                
+
                 user.Name = name;
                 await _repository.SaveAsync();
                 return Ok("Name changed successfully");
             }
             catch (Exception e)
             {
-                return Json(("Error: {0}", e));
+                return Json("Error: " + e);
             }
         }
 
+        [Route("changepassword")]
         [HttpPost]
-        [Route("changePassword")]
         public async Task<IActionResult> ChangePassword(string oldPassword, string password, string passwordCompare)
         {
             var user = _repository.GetById<User>(User.Identity.Name);
@@ -92,12 +77,12 @@ namespace NoteAndTask.Controllers
             }
             catch (Exception e)
             {
-                return Json(("Error: {0}", e));
+                return Json("Error: " + e);
             }
         }
-        
+
+        [Route("changeemailaddress")]
         [HttpGet]
-        [Route("changeEmailAddress")]
         public async Task<IActionResult> ChangeEmailAddress(string oldEmail, string email)
         {
             var user = _repository.GetById<User>(User.Identity.Name);
@@ -116,7 +101,7 @@ namespace NoteAndTask.Controllers
             }
             catch (Exception e)
             {
-                return Json(("Error: {0}", e));
+                return Json("Error: " + e);
             }
         }
     }

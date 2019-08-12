@@ -18,32 +18,27 @@ namespace NoteAndTask.Controllers
     public class AuthController : Controller
     {
         private readonly IRepository _repository;
-        
+
         private AuthOptions AuthOptions { get; }
 
-        public AuthController
-        (
-            IRepository repository,
-            IOptions<AuthOptions> authOptions
-            )
+        public AuthController(IRepository repository, IOptions<AuthOptions> authOptions)
         {
             _repository = repository;
             AuthOptions = authOptions.Value;
         }
-        
-        [HttpPost]
+
         [Route("signin")]
+        [HttpPost]
         public async Task<IActionResult> SignIn([FromBody] LoginViewModel model)
         {
             if (model.Password != model.ConfirmPassword)
             {
-                return Json(("Please, check written passwords (password: {0}, password confirm: {1})",
-                    model.Password, model.ConfirmPassword));
+                return Json(($"Please, check written passwords (password: {0}, password confirm: {1})", model.Password, model.ConfirmPassword));
             }
 
             if (!ModelState.IsValid)
             {
-                return StatusCode(401, ("Please check your login and password (login: {0}, password: {1}", model.Login, model.Password));
+                return Unauthorized(($"Please check your login and password (login: {0}, password: {1})", model.Login, model.Password));
             }
 
             try
@@ -60,12 +55,12 @@ namespace NoteAndTask.Controllers
             }
             catch (Exception e)
             {
-                return Json(("Error: {0}", e));
+                return Json(($"Error: {0}", e));
             }
         }
 
-        [HttpPost]
         [Route("signup")]
+        [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] RegisterViewModel model)
         {
             if (_repository.GetFirst<User>(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email) != null)
@@ -90,7 +85,7 @@ namespace NoteAndTask.Controllers
             }
             catch (Exception e)
             {
-                return Json(("Error: {0}", e));
+                return Json(($"Error: {0}", e));
             }
         }
 
@@ -104,7 +99,7 @@ namespace NoteAndTask.Controllers
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, id)
             };
-            
+
             var token = new JwtSecurityToken(
                 issuer: AuthOptions.Issuer,
                 audience: AuthOptions.Audience,

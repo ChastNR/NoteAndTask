@@ -11,6 +11,9 @@ namespace Repository.Context
         public DbSet<TaskList> TaskLists { get; set; }
 
         public ApplicationContext(DbContextOptions options)
-            : base(options) { }
+            : base(options)
+        {
+            Database.EnsureCreated();
+        }
     }
 }

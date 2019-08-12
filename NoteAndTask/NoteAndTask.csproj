@@ -20,6 +20,7 @@
   <ItemGroup>
     <Content Include="client-app\src\components\layout\AddNewListModal.js" />
     <Content Include="client-app\src\components\SignUp.jsx" />
+    <Content Remove="Data\**" />
   </ItemGroup>
 
 
@@ -62,6 +63,21 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Repository\Repository.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Data\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Data\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="Data\**" />
   </ItemGroup>
 
 

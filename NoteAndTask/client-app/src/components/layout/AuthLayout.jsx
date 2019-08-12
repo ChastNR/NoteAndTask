@@ -2,8 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Container, Navbar, NavbarBrand, NavItem, Row } from "react-bootstrap";
 import "./AuthLayout.css";
-import { BoardLayout } from "./BoardLayout";
-import { request } from "../../libs/api";
+import "../css/global.css";
 
 export class AuthLayout extends React.Component {
   static displayName = AuthLayout.name;
@@ -11,20 +10,9 @@ export class AuthLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      signInUpForm: null,
-      user: null
+      signInUpForm: null
     };
-
-    //this.getUser();
   }
-
-  // getUser() {
-  //   if (this.state.user == null && localStorage.getItem("token")) {
-  //     request("/api/account/getUser").then(data => {
-  //       this.setState({ user: data["name"] });
-  //     });
-  //   }
-  // }
 
   renderAuthPanel() {
     if (localStorage.getItem("token")) {
@@ -33,12 +21,7 @@ export class AuthLayout extends React.Component {
           <ul className="navbar-nav ml-auto">
             <div className="dropdown-divider" />
             <NavItem>
-              {/*<Link to="/board">Board</Link>*/}
               <Link to="/dashboard">Board</Link>
-            </NavItem>
-            <div className="dropdown-divider" />
-            <NavItem>
-              <Link to="/settings">{this.state.user}</Link>
             </NavItem>
           </ul>
         </div>
@@ -68,10 +51,9 @@ export class AuthLayout extends React.Component {
           <Container>
             <Navbar className="navbar-expand-md" id="main-nav">
               <NavbarBrand href="/">Note&Task</NavbarBrand>
-
-              <a
+              <button
                 type="button"
-                className="navbar-toggler"
+                className="navbar-toggler link-button"
                 data-toggle="collapse"
                 data-target="#navigation-toggler"
                 aria-controls="navigation-toggler"
@@ -79,20 +61,8 @@ export class AuthLayout extends React.Component {
                 aria-label="Toggle navigation"
               >
                 <i className="fas fa-bars" />
-              </a>
+              </button>
               {this.renderAuthPanel()}
-              {/*<div className="collapse navbar-collapse" id="navigation-toggler">*/}
-              {/*    <ul className="navbar-nav ml-auto">*/}
-              {/*        <div className="dropdown-divider"/>*/}
-              {/*        <NavItem>*/}
-              {/*            <Link to='/SignIn'>Sign In</Link>*/}
-              {/*        </NavItem>*/}
-              {/*        <div className="dropdown-divider"/>*/}
-              {/*        <NavItem>*/}
-              {/*            <Link to='/SignUp'>Sign Up</Link>*/}
-              {/*        </NavItem>*/}
-              {/*    </ul>*/}
-              {/*</div>*/}
             </Navbar>
           </Container>
         </header>

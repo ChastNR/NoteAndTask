@@ -1,9 +1,8 @@
 import React from "react";
 import Modal from "react-modal";
 import "./AddNewTaskModal.css";
-import {request} from "../../libs/api";
-import {Tasks} from "../Tasks";
-import {updateState} from "../Tasks";
+import { request } from "../../libs/api";
+import "../css/global.css";
 
 const customStyles = {
   content: {
@@ -13,8 +12,6 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)"
-    
-    
   }
 };
 
@@ -35,64 +32,47 @@ export class AddNewTaskModal extends React.Component {
 
   loadLists() {
     if (this.state.lists == null) {
-      request("/api/Task/Lists").then(data => {
+      request("/api/list/get").then(data => {
         this.setState({ lists: data });
       });
     }
   }
 
-  handleSubmit = async (event) => {
+  handleSubmit = async event => {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
+      var formData;
 
-      let formData;
-
-      if(event.target.taskListId.value.length === 0)
-      {
+      if (event.target.listId.value.length === 0) {
         formData = {
-          "name": event.target.name.value,
-          "description": event.target.description.value,
-          "expiresOn": event.target.expiresOn.value
+          name: event.target.name.value,
+          description: event.target.description.value,
+          expiresOn: event.target.expiresOn.value
         };
-      }
-      else {
+      } else {
         formData = {
-          "name": event.target.name.value,
-          "description": event.target.description.value,
-          "expiresOn": event.target.expiresOn.value,
-          "taskListId" : event.target.taskListId.value
+          name: event.target.name.value,
+          description: event.target.description.value,
+          expiresOn: event.target.expiresOn.value,
+          taskListId: event.target.listId.value
         };
       }
 
-      await fetch("api/task/addNewTask", {
+      await fetch("api/task/add", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          'Authorization': 'Bearer ' + localStorage.getItem("token")
+          Authorization: "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify(formData)
-      }).then(() => {
-        this.closeModal();
-       updateState();
-      })
+      });
+      this.closeModal();
     } else {
-      event.target.reportValidity()
+      event.target.reportValidity();
     }
   };
-  
-  handleClick = () => {
-    if(window.screen.width < 768 )
-    {
-      let wrapper = document.getElementById("wrapper");
-      if (wrapper.classList.contains("toggled")) {
-        wrapper.classList.remove("toggled");
-      } else {
-        wrapper.classList.add("toggled");
-      }
-    }
-  };
-  
+
   openModal() {
     this.setState({ modalIsOpen: true });
   }
@@ -104,97 +84,87 @@ export class AddNewTaskModal extends React.Component {
   render() {
     return (
       <div>
-        {/*<a href className="list-group-item" onClick={() => {this.handleClick(); this.openModal(); this.loadLists()}}>*/}
-        {/*  <i className="far fa-plus-square" />*/}
-        {/*</a>*/}
-          <a href="#" onClick={() => { this.openModal(); this.loadLists()}} >Add new task</a>
-       
+        <button
+          type="button"
+          className="link-button"
+          onClick={() => {
+            this.openModal();
+            this.loadLists();
+          }}
+        >
+          Add new task
+        </button>
+
         <Modal
+          className="modal-shadow"
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
+          ariaHideApp={false}
           style={customStyles}
         >
-            <div className="modal-header">
-              <h5 className="modal-title">Add new task</h5>
-              <button type="button" className="close" onClick={this.closeModal}>
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form onSubmit={this.handleSubmit}>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label className="control-label">Name:</label>
-                  <input type="text" name="name" className="form-control" />
-                </div>
-                <div className="form-group">
-                  <label className="control-label">Description:</label>
-                  <textarea name="description" className="form-control" rows="4" cols="50" />
-                </div>
-                <div className="form-group">
-                  <label className="control-label">Expires on?</label>
-                  <input name="expiresOn" className="form-control" type="date" />
-                </div>
-                <div className="form-group">
-                  <label className="control-label">Choose Task List:</label>
-                  {this.state.lists && (
-                  <select name="taskListId" className="form-control">
+          <div className="modal-header">
+            <h5 className="modal-title">Add new task</h5>
+            <button type="button" className="close" onClick={this.closeModal}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form onSubmit={this.handleSubmit}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label className="control-label">Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-control"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label className="control-label">Description:</label>
+                <textarea
+                  name="description"
+                  className="form-control"
+                  rows="4"
+                  cols="50"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label className="control-label">Expires on?</label>
+                <input
+                  name="expiresOn"
+                  className="form-control"
+                  type="date"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label className="control-label">Choose Task List:</label>
+                {this.state.lists && (
+                  <select name="listId" className="form-control">
                     <option />
                     {this.state.lists.map(list => (
-                        <option value={list.taskListId}>
-                          {list.name}
-                        </option>
+                      <option value={list.id}>{list.name}</option>
                     ))}
                   </select>
-                  )}
-                </div>
+                )}
               </div>
-              <div className="modal-footer">
-                <button
-                    type="button"
-                    className="btn btn-outline-danger"
-                    onClick={this.closeModal}
-                >
-                  Close
-                </button>
-                <button type="submit" className="btn btn-outline-primary">
-                 Add
-                </button>
-              </div>
-            </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={this.closeModal}
+              >
+                Close
+              </button>
+              <button type="submit" className="btn btn-outline-primary">
+                Add
+              </button>
+            </div>
+          </form>
         </Modal>
       </div>
     );
   }
 }
-
-
-// handleSubmit = async (event) => {
-//   event.preventDefault();
-//
-//   if (event.target.checkValidity()) {
-//
-//     let formData = {
-//       "name": event.target.name.value,
-//       "description": event.target.description.value,
-//       "expiresOn": event.target.expiresOn.value,
-//       "taskListId" : event.target.taskListId.value
-//     };
-//
-//     await fetch("api/task/addNewTask", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         'Authorization': 'Bearer ' + localStorage.getItem("token")
-//       },
-//       body: JSON.stringify(formData)
-//     }).then(response => response.text())
-//         .then(data =>
-//         {
-//           if(data) {
-//             window.location.href = "/tasks/"+ formData["taskListId"];
-//           }
-//         })
-//   } else {
-//     event.target.reportValidity()
-//   }
-// };

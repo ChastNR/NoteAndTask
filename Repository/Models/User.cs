@@ -9,14 +9,20 @@ namespace Repository.Models
     public class User : IEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
+        [MaxLength(36)]
         public string Id { get; set; }
 
+        [MaxLength(30)]
         public string Name { get; set; }
 
+        [Required]
+        [MaxLength(50)]
         public string Email { get; set; }
 
+        [Required]
         public string PasswordHash { get; set; }
-
+        
+        [MaxLength(20)]
         public string PhoneNumber { get; set; }
 
         public DateTime CreationDate { get; set; } = DateTime.Now;
