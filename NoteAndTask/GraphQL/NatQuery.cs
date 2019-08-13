@@ -10,11 +10,11 @@ namespace NoteAndTask.GraphQL
 {
     public class NatQuery : ObjectGraphType
     {
-        private readonly IRepository _repository;
+        //private readonly IRepository _repository;
 
-        public NatQuery(IRepository repository)
+        public NatQuery(IRepository repo)
         {
-            _repository = repository;
+            var repository = repo;
 
             Field<ListGraphType<TaskListType>>("lists",
                 arguments: new QueryArguments(new List<QueryArgument>
@@ -39,36 +39,36 @@ namespace NoteAndTask.GraphQL
                 resolve: context =>
                 {
                     var user = (ClaimsPrincipal)context.UserContext;
-                    bool isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
+                    var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
-                    var query = _repository.GetAll<TaskList>();
+                    var query = repository.GetAll<TaskList>();
 
                     var listId = context.GetArgument<string>("id");
 
                     if (string.IsNullOrEmpty(listId))
                     {
-                        return _repository.GetAll<TaskList>().Where(l => l.Id == listId);
+                        return repository.GetAll<TaskList>().Where(l => l.Id == listId);
                     }
 
                     var name = context.GetArgument<string>("name");
 
                     if (string.IsNullOrEmpty(name))
                     {
-                        return _repository.GetAll<TaskList>().Where(l => l.Name == name);
+                        return repository.GetAll<TaskList>().Where(l => l.Name == name);
                     }
 
                     var userId = context.GetArgument<string>("userId");
 
                     if (string.IsNullOrEmpty(userId))
                     {
-                        return _repository.GetAll<TaskList>().Where(l => l.UserId == userId);
+                        return repository.GetAll<TaskList>().Where(l => l.UserId == userId);
                     }
 
                     var creationDate = context.GetArgument<DateTime?>("creationDate");
 
                     if (creationDate.HasValue)
                     {
-                        return _repository.GetAll<TaskList>().Where(l => l.CreationDate == creationDate);
+                        return repository.GetAll<TaskList>().Where(l => l.CreationDate == creationDate);
                     }
 
                     return query.ToList();

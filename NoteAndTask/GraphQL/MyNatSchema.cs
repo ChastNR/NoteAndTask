@@ -8,7 +8,7 @@ namespace NoteAndTask.GraphQL
 	{
         public NatSchema(IDependencyResolver resolver) : base(resolver)
         {
-            Query = resolver.Resolve<NatQuery>
+            Query = resolver.Resolve<NatQuery>();
         }
     }
 }
