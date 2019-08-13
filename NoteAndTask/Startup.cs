@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using GraphiQl;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
@@ -141,10 +142,12 @@ namespace NoteAndTask
             app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
             app.UseCookiePolicy();
-
-            app.UseGraphQL<NatSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
-
+            
+            
+            //app.UseGraphQL<NatSchema>();
+            //app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+            app.UseGraphiQl("/graphql");
+            
             #region UseMvc
 
             app.UseMvc(routes =>
