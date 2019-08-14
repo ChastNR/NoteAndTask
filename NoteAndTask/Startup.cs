@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using GraphiQl;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
@@ -34,63 +33,31 @@ namespace NoteAndTask
 
         public void ConfigureServices(IServiceCollection services)
         {
-            #region CookiePolicy
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            #endregion CookiePolicy
-
-            #region EmailSender
-
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailSender, EmailSender>();
-
-            #endregion EmailSender
-
-            #region DbContext
-
+            
             services.AddDbContext<ApplicationContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
             });
             services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
-
-            #endregion DbContext
-
-            #region GraphQL
-
-            services.AddScoped<IDependencyResolver>(ServiceProviderServiceExtensions =>
-                new FuncDependencyResolver(ServiceProviderServiceExtensions.GetRequiredService));
-
-            services.AddScoped<NatSchema>();
-
-            services.AddGraphQL(x =>
-            {
-                x.ExposeExceptions = true; //set true only in development mode. make it switchable.
-            })
-            .AddGraphTypes(ServiceLifetime.Scoped);
-
-
-            #endregion GraphQL
-
-            #region GraphQlAuthorization
-
-            services.AddGraphQL(x =>
-            {
-                x.ExposeExceptions = true;
-            })
-.AddGraphTypes(ServiceLifetime.Scoped)
-.AddUserContextBuilder(httpContext => httpContext.User)
-.AddDataLoader();
-
-            #endregion GraphQlAuthorization
-
-            #region Authentication
-
+            
+            
+            //GraphQL
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<AppSchema>();
+ 
+            services.AddGraphQL(o => { o.ExposeExceptions = false; })
+                .AddGraphTypes(ServiceLifetime.Scoped);
+            //GraphQL
+            
+            
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
             var authConfig = Configuration.GetSection("AuthOptions").Get<AuthOptions>();
@@ -115,11 +82,7 @@ namespace NoteAndTask
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-
-            #endregion Authentication
-
-
-
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client-app/build"; });
         }
@@ -144,22 +107,15 @@ namespace NoteAndTask
             app.UseCookiePolicy();
             
             
-            //app.UseGraphQL<NatSchema>();
-            //app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
-            app.UseGraphiQl("/graphql");
+            app.UseGraphQL<AppSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
             
-            #region UseMvc
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
-
-            #endregion
-
-            #region UseSpa
 
             app.UseSpa(spa =>
             {
@@ -167,11 +123,9 @@ namespace NoteAndTask
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseReactDevelopmentServer("start");
                 }
             });
-
-            #endregion
         }
     }
 }

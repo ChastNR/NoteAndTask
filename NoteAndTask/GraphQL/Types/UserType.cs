@@ -19,7 +19,6 @@ namespace NoteAndTask.GraphQL.Types
             Field(x => x.Token);
             Field(x => x.UserLogoPath);
             Field(x => x.Tasks, type: typeof(ListGraphType<TaskEntityType>)).Description("Tasks");
-            //Field<TaskEntityType>(nameof(User.Tasks));
         }
     }
 }

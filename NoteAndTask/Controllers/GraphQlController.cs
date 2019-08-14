@@ -21,7 +21,7 @@ namespace NoteAndTask.Controllers
 
             var schema = new Schema
             {
-                Query = new TaskListQuery(_repository)
+                Query = new AppQuery(_repository)
             };
 
             var result = await new DocumentExecuter().ExecuteAsync(_ =>
