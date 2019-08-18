@@ -4,6 +4,7 @@ import { DashBoard } from "./layout/DashBoard";
 import "./Tasks.css";
 import "./css/global.css";
 import { AddNewTaskModal } from "./layout/AddNewTaskModal";
+import { req } from "../libs/gql";
 
 export class Tasks extends React.Component {
   static displayName = Tasks.name;
@@ -15,15 +16,31 @@ export class Tasks extends React.Component {
     this.loadTasks(this.props.match.params.id);
   }
 
+  // loadTasks(id) {
+  //   if (id) {
+  //     request("/api/task/get?id=" + id).then(data => {
+  //       this.setState({ tasks: data });
+  //     });
+  //   } else {
+  //     request("/api/task/get").then(data => {
+  //       this.setState({ tasks: data });
+  //     });
+  //   }
+  // }
+
   loadTasks(id) {
     if (id) {
-      request("/api/task/get?id=" + id).then(data => {
-        this.setState({ tasks: data });
+      req({
+        query: "{tasks(id: " + id + ") {id, name, expiresOn, description}}"
+      }).then(response => {
+        this.setState({ tasks: response.data.tasks });
       });
     } else {
-      request("/api/task/get").then(data => {
-        this.setState({ tasks: data });
-      });
+      req({ query: "{tasks {id, name, expiresOn, description}}" }).then(
+        response => {
+          this.setState({ tasks: response.data.tasks });
+        }
+      );
     }
   }
 

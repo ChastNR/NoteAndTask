@@ -1,5 +1,6 @@
 import React from "react";
 import { request } from "../../libs/api";
+import { req } from "../../libs/gql";
 import { Link } from "react-router-dom";
 import "./Dashboard.css";
 import { Footer } from "./Footer";
@@ -13,18 +14,25 @@ export class DashBoard extends React.Component {
     this.state = {
       user: null
     };
-  
-    if(this.state.user === null)
-    {
+
+    if (this.state.user === null) {
       this.getUser();
     }
-    
   }
 
+  // getUser() {
+  //     request("/api/account/getuser").then(data => {
+  //       this.setState({ user: data["name"] });
+  //     });
+  // }
+
   getUser() {
-      request("/api/account/getuser").then(data => {
-        this.setState({ user: data["name"] });
-      });
+    req({
+      query: "{users {name}}"
+    }).then(response => {
+      console.log(response.data.users["0"]["name"]);
+      this.setState({ user: response.data.users["0"]["name"] });
+    });
   }
 
   render() {

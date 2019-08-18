@@ -9,11 +9,11 @@ namespace NoteAndTask.Controllers
 {
     [Route("graphql")]
     [ApiController]
-    public class GraphQlController : Controller
+    public class GraphQLController : Controller
     {
         private readonly IRepository _repository;
 
-        public GraphQlController(IRepository repository) => _repository = repository;
+        public GraphQLController(IRepository repository) => _repository = repository;
 
         public async Task<IActionResult> Post([FromBody] GraphQLQuery query)
         {
@@ -21,7 +21,7 @@ namespace NoteAndTask.Controllers
 
             var schema = new Schema
             {
-                Query = new AppQuery(_repository)
+                Query = new AppQuery(_repository, null)
             };
 
             var result = await new DocumentExecuter().ExecuteAsync(_ =>
