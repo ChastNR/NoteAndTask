@@ -16,33 +16,33 @@ export class Tasks extends React.Component {
     this.loadTasks(this.props.match.params.id);
   }
 
-  // loadTasks(id) {
-  //   if (id) {
-  //     request("/api/task/get?id=" + id).then(data => {
-  //       this.setState({ tasks: data });
-  //     });
-  //   } else {
-  //     request("/api/task/get").then(data => {
-  //       this.setState({ tasks: data });
-  //     });
-  //   }
-  // }
-
   loadTasks(id) {
     if (id) {
-      req({
-        query: "{tasks(id: " + id + ") {id, name, expiresOn, description}}"
-      }).then(response => {
-        this.setState({ tasks: response.data.tasks });
+      request("/api/task/get?id=" + id).then(data => {
+        this.setState({ tasks: data });
       });
     } else {
-      req({ query: "{tasks {id, name, expiresOn, description}}" }).then(
-        response => {
-          this.setState({ tasks: response.data.tasks });
-        }
-      );
+      request("/api/task/get").then(data => {
+        this.setState({ tasks: data });
+      });
     }
   }
+
+  // loadTasks(id) {
+  //   if (id) {
+  //     req({
+  //       query: "{tasks(id: " + id + ") {id, name, expiresOn, description}}"
+  //     }).then(response => {
+  //       this.setState({ tasks: response.data.tasks });
+  //     });
+  //   } else {
+  //     req({ query: "{tasks {id, name, expiresOn, description}}" }).then(
+  //       response => {
+  //         this.setState({ tasks: response.data.tasks });
+  //       }
+  //     );
+  //   }
+  // }
 
   componentWillReceiveProps(newProps) {
     this.loadTasks(newProps.match.params.id);

@@ -14,14 +14,27 @@ namespace NoteAndTask.Controllers
     public class ListController : Controller
     {
         private readonly IRepository _repository;
+        private readonly IListRepository _listRepository;
 
-        public ListController(IRepository repository) => _repository = repository;
+        public ListController(IRepository repository, IListRepository listRepository)
+        {
+            _listRepository = listRepository;
+            _repository = repository;
+        }
+
+//        [Route("get")]
+//        [HttpGet]
+//        public IEnumerable<TaskList> Get() => _repository.GetAll<TaskList>()
+//            .Where(u => u.UserId == User.Identity.Name)
+//            .OrderByDescending(c => c.CreationDate);
 
         [Route("get")]
         [HttpGet]
-        public IEnumerable<TaskList> Get() => _repository.GetAll<TaskList>()
-            .Where(u => u.UserId == User.Identity.Name)
-            .OrderByDescending(c => c.CreationDate);
+        public IEnumerable<TaskList> Get()
+        {
+           return _listRepository.Get(User.Identity.Name, "CreationDate");
+        }
+        
 
         [Route("add")]
         [HttpPost]

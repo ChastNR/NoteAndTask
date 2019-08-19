@@ -19,6 +19,7 @@ using NoteAndTask.GraphQL;
 using Repository.Context;
 using Repository.Interface;
 using Repository.Repositories;
+using Repository.SqlRepositories;
 
 namespace NoteAndTask
 {
@@ -47,7 +48,9 @@ namespace NoteAndTask
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
             });
             services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
-            
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IListRepository, ListRepository>();
             
             //GraphQL
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));

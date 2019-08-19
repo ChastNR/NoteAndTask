@@ -20,20 +20,20 @@ export class DashBoard extends React.Component {
     }
   }
 
-  // getUser() {
-  //     request("/api/account/getuser").then(data => {
-  //       this.setState({ user: data["name"] });
-  //     });
-  // }
-
   getUser() {
-    req({
-      query: "{users {name}}"
-    }).then(response => {
-      console.log(response.data.users["0"]["name"]);
-      this.setState({ user: response.data.users["0"]["name"] });
-    });
+      request("/api/account/getuser").then(data => {
+        this.setState({ user: data["name"] });
+      });
   }
+
+  // getUser() {
+  //   req({
+  //     query: "{users {name}}"
+  //   }).then(response => {
+  //     console.log(response.data.users["0"]["name"]);
+  //     this.setState({ user: response.data.users["0"]["name"] });
+  //   });
+  // }
 
   render() {
     return (

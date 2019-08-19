@@ -11,6 +11,7 @@ using NoteAndTask.Extensions;
 using NoteAndTask.Models.ViewModels;
 using Repository.Interface;
 using Repository.Models;
+using Repository.SqlRepositories;
 
 namespace NoteAndTask.Controllers
 {
@@ -18,18 +19,20 @@ namespace NoteAndTask.Controllers
     public class AuthController : Controller
     {
         private readonly IRepository _repository;
+        private readonly IUserRepository _userRepository;
 
         private AuthOptions AuthOptions { get; }
 
-        public AuthController(IRepository repository, IOptions<AuthOptions> authOptions)
+        public AuthController(IRepository repository,IUserRepository userRepository, IOptions<AuthOptions> authOptions)
         {
             _repository = repository;
+            _userRepository = userRepository;
             AuthOptions = authOptions.Value;
         }
 
         [Route("signin")]
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] LoginViewModel model)
+        public IActionResult SignIn([FromBody] LoginViewModel model)
         {
             if (model.Password != model.ConfirmPassword)
             {
@@ -43,9 +46,11 @@ namespace NoteAndTask.Controllers
 
             try
             {
-                var user = await _repository.GetFirstAsync<User>(u =>
-                    u.Email == model.Login || u.PhoneNumber == model.Login);
-
+                //var user = await _repository.GetFirstAsync<User>(u =>
+                //    u.Email == model.Login || u.PhoneNumber == model.Login);
+                
+                var user = _userRepository.AuthUser(model.Login);
+                
                 if (user == null)
                 {
                     return Unauthorized();
@@ -63,10 +68,15 @@ namespace NoteAndTask.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] RegisterViewModel model)
         {
-            if (_repository.GetFirst<User>(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email) != null)
+            if (_userRepository.UserExist(model.Email, model.PhoneNumber) != null)
             {
                 return BadRequest("There is another user with the same email or mobile number");
             }
+            
+//            if (_repository.GetFirst<User>(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email) != null)
+//            {
+//                return BadRequest("There is another user with the same email or mobile number");
+//            }
 
             try
             {
