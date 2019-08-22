@@ -1,15 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Repository.Interface;
 
 namespace Repository.Models
 {
-    public class TaskEntity : IEntity
+    public class TaskEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
-        [MaxLength(36)]
-        public string Id { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -22,14 +20,14 @@ namespace Repository.Models
 
         public DateTime ExpiresOn { get; set; }
 
-        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public DateTime CreationDate { get; } = DateTime.Now;
 
-        public string TaskListId { get; set; }
+        public int? TaskListId { get; set; }
 
         public TaskList TaskList { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         public User User { get; set; }
     }

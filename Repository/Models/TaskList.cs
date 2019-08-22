@@ -6,24 +6,23 @@ using Repository.Interface;
 
 namespace Repository.Models
 {
-    public class TaskList : IEntity
+    public class TaskList
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
-        [MaxLength(36)]
-        public string Id { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         public User User { get; set; }
 
         public ICollection<TaskEntity> Tasks { get; set; }
 
-        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public DateTime CreationDate { get; } = DateTime.Now;
 
     }
 }

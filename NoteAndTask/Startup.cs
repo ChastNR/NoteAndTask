@@ -16,10 +16,8 @@ using Microsoft.IdentityModel.Tokens;
 using NoteAndTask.Extensions;
 using NoteAndTask.Extensions.EmailSender;
 using NoteAndTask.GraphQL;
-using Repository.Context;
 using Repository.Interface;
 using Repository.Repositories;
-using Repository.SqlRepositories;
 
 namespace NoteAndTask
 {
@@ -43,21 +41,16 @@ namespace NoteAndTask
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailSender, EmailSender>();
             
-            services.AddDbContext<ApplicationContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
-            });
-            services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
-
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IListRepository, ListRepository>();
+            services.AddTransient<ITaskRepository, TaskRepository>();
             
             //GraphQL
-            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-            services.AddScoped<AppSchema>();
- 
-            services.AddGraphQL(o => { o.ExposeExceptions = false; })
-                .AddGraphTypes(ServiceLifetime.Scoped);
+//            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+//            services.AddScoped<AppSchema>();
+// 
+//            services.AddGraphQL(o => { o.ExposeExceptions = false; })
+//                .AddGraphTypes(ServiceLifetime.Scoped);
             //GraphQL
             
             
@@ -110,8 +103,8 @@ namespace NoteAndTask
             app.UseCookiePolicy();
             
             
-            app.UseGraphQL<AppSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+            //app.UseGraphQL<AppSchema>();
+            //app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
             
             app.UseMvc(routes =>
             {

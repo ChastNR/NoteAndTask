@@ -27,23 +27,7 @@ export class Tasks extends React.Component {
       });
     }
   }
-
-  // loadTasks(id) {
-  //   if (id) {
-  //     req({
-  //       query: "{tasks(id: " + id + ") {id, name, expiresOn, description}}"
-  //     }).then(response => {
-  //       this.setState({ tasks: response.data.tasks });
-  //     });
-  //   } else {
-  //     req({ query: "{tasks {id, name, expiresOn, description}}" }).then(
-  //       response => {
-  //         this.setState({ tasks: response.data.tasks });
-  //       }
-  //     );
-  //   }
-  // }
-
+  
   componentWillReceiveProps(newProps) {
     this.loadTasks(newProps.match.params.id);
   }

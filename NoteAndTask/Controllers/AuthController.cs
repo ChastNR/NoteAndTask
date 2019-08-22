@@ -11,44 +11,37 @@ using NoteAndTask.Extensions;
 using NoteAndTask.Models.ViewModels;
 using Repository.Interface;
 using Repository.Models;
-using Repository.SqlRepositories;
 
 namespace NoteAndTask.Controllers
 {
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly IRepository _repository;
         private readonly IUserRepository _userRepository;
 
         private AuthOptions AuthOptions { get; }
 
-        public AuthController(IRepository repository,IUserRepository userRepository, IOptions<AuthOptions> authOptions)
+        public AuthController(IUserRepository userRepository, IOptions<AuthOptions> authOptions)
         {
-            _repository = repository;
             _userRepository = userRepository;
             AuthOptions = authOptions.Value;
         }
 
-        [Route("signin")]
-        [HttpPost]
+        [HttpPost("signin")]
         public IActionResult SignIn([FromBody] LoginViewModel model)
         {
             if (model.Password != model.ConfirmPassword)
             {
-                return Json(($"Please, check written passwords (password: {0}, password confirm: {1})", model.Password, model.ConfirmPassword));
+                return Json($"Please, check written passwords (password: {model.Password}, password confirm: {model.ConfirmPassword})");
             }
 
             if (!ModelState.IsValid)
             {
-                return Unauthorized(($"Please check your login and password (login: {0}, password: {1})", model.Login, model.Password));
+                return Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})");
             }
 
             try
             {
-                //var user = await _repository.GetFirstAsync<User>(u =>
-                //    u.Email == model.Login || u.PhoneNumber == model.Login);
-                
                 var user = _userRepository.AuthUser(model.Login);
                 
                 if (user == null)
@@ -56,28 +49,22 @@ namespace NoteAndTask.Controllers
                     return Unauthorized();
                 }
 
-                return Ok(GetToken(user.Id));
+                return Ok(GetToken(user.Id.ToString()));
             }
             catch (Exception e)
             {
-                return Json(($"Error: {0}", e));
+                return Json($"Error: {e}");
             }
         }
 
-        [Route("signup")]
-        [HttpPost]
-        public async Task<IActionResult> SignUp([FromBody] RegisterViewModel model)
+        [HttpPost("signup")]
+        public IActionResult SignUp([FromBody] RegisterViewModel model)
         {
             if (_userRepository.UserExist(model.Email, model.PhoneNumber) != null)
             {
                 return BadRequest("There is another user with the same email or mobile number");
             }
             
-//            if (_repository.GetFirst<User>(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email) != null)
-//            {
-//                return BadRequest("There is another user with the same email or mobile number");
-//            }
-
             try
             {
                 var user = new User
@@ -87,15 +74,14 @@ namespace NoteAndTask.Controllers
                     PhoneNumber = model.PhoneNumber,
                     PasswordHash = model.Password
                 };
-
-                _repository.Create(user);
-                await _repository.SaveAsync();
-
-                return Ok(GetToken(_repository.GetFirst<User>(u => u.Email == user.Email || u.PhoneNumber == user.PhoneNumber)?.Id));
+                
+                _userRepository.Add(user);
+                
+                return Ok();
             }
             catch (Exception e)
             {
-                return Json(($"Error: {0}", e));
+                return Json($"Error: {e}");
             }
         }
 

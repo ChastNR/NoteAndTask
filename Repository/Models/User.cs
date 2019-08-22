@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Principal;
 using Repository.Interface;
 
 namespace Repository.Models
 {
-    public class User : IEntity
+    public class User
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
-        [MaxLength(36)]
-        public string Id { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [MaxLength(30)]
         public string Name { get; set; }
@@ -25,7 +25,7 @@ namespace Repository.Models
         [MaxLength(20)]
         public string PhoneNumber { get; set; }
 
-        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public DateTime CreationDate { get; } = DateTime.Now;
 
         public string UserLogoPath { get; set; }
 

@@ -5,6 +5,8 @@ namespace Repository.Interface
 {
     public interface IListRepository
     {
-        IEnumerable<TaskList> Get(string userId, object orderBy);
+        IEnumerable<TaskList> Get(int userId, object orderBy);
+
+        bool Add(string name, int userId);
     }
 }
