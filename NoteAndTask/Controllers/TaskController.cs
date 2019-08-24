@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ namespace NoteAndTask.Controllers
         public TaskController(ITaskRepository taskRepository) => _taskRepository = taskRepository;
         
         [HttpGet("get")]
-        public IEnumerable<TaskEntity> Get(int id, bool archived) => _taskRepository.Get(id, archived, Convert.ToInt32(User.Identity.Name));
+        public IEnumerable<TaskEntity> Get(int? id, bool archived) => _taskRepository.Get(id, archived, Convert.ToInt32(User.Identity.Name));
 
         [HttpPost("add")]
         public IActionResult Add([FromBody] TaskEntity task)
@@ -35,24 +36,17 @@ namespace NoteAndTask.Controllers
             }
         }
 
-//        [HttpGet("done")]
-//        public async Task<IActionResult> Done(string id)
-//        {
-//            if (string.IsNullOrEmpty(id))
-//                return BadRequest("Cant add task (id: " + id + ") to archive");
-//
-//            try
-//            {
-//                var task = _repository.GetById<TaskEntity>(id);
-//                task.IsDone = true;
-//                await _repository.SaveAsync();
-//
-//                return Ok("Task (id: " + id + ", name: " + task.Name + ") moved to archive successfully");
-//            }
-//            catch (Exception e)
-//            {
-//                return Json("Error: " + e);
-//            }
-//        }
+        [HttpGet("done")]
+        public IActionResult Done(int? id)
+        {
+            try
+            {
+                return _taskRepository.TaskDone(id) ? (IActionResult) Ok("Task moved to archive successfully") : BadRequest("Cant add task (id: " + id + ") to archive");
+            }
+            catch (Exception e)
+            {
+                return Json("Error: " + e);
+            }
+        }
     }
 }

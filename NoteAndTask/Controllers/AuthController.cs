@@ -18,9 +18,7 @@ namespace NoteAndTask.Controllers
     public class AuthController : Controller
     {
         private readonly IUserRepository _userRepository;
-
         private AuthOptions AuthOptions { get; }
-
         public AuthController(IUserRepository userRepository, IOptions<AuthOptions> authOptions)
         {
             _userRepository = userRepository;
@@ -39,17 +37,10 @@ namespace NoteAndTask.Controllers
             {
                 return Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})");
             }
-
+            
             try
             {
-                var user = _userRepository.AuthUser(model.Login);
-                
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-
-                return Ok(GetToken(user.Id.ToString()));
+              return Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
             }
             catch (Exception e)
             {
@@ -60,24 +51,19 @@ namespace NoteAndTask.Controllers
         [HttpPost("signup")]
         public IActionResult SignUp([FromBody] RegisterViewModel model)
         {
-            if (_userRepository.UserExist(model.Email, model.PhoneNumber) != null)
-            {
-                return BadRequest("There is another user with the same email or mobile number");
-            }
-            
             try
             {
-                var user = new User
+                _userRepository.Add(new User
                 {
                     Name = model.Name,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     PasswordHash = model.Password
-                };
+                });
                 
-                _userRepository.Add(user);
-                
-                return Ok();
+                return _userRepository.UserExist(model.Email, model.PhoneNumber) != null
+                    ? BadRequest("There is another user with the same email or mobile number")
+                    : (IActionResult) Ok("Success");
             }
             catch (Exception e)
             {
@@ -85,7 +71,7 @@ namespace NoteAndTask.Controllers
             }
         }
 
-        private string GetToken(string id)
+        private string GetToken(int id)
         {
             var signingCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthOptions.SecurityKey)),
@@ -93,7 +79,7 @@ namespace NoteAndTask.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, id)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, Convert.ToString(id))
             };
 
             var token = new JwtSecurityToken(

@@ -134,7 +134,7 @@ export class AddNewTaskModal extends React.Component {
                 <input
                   name="expiresOn"
                   className="form-control"
-                  type="date"
+                  type="datetime-local"
                   required
                 />
               </div>

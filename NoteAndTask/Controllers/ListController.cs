@@ -17,7 +17,7 @@ namespace NoteAndTask.Controllers
         public ListController(IListRepository listRepository) => _listRepository = listRepository;
         
         [HttpGet("get")]
-        public IEnumerable<TaskList> Get() => _listRepository.Get(Convert.ToInt32(User.Identity.Name), "CreationDate");
+        public IEnumerable<TaskList> Get() => _listRepository.Get(Convert.ToInt32(User.Identity.Name));
         
         [HttpPost("add")]
         public IActionResult Add(string name)
@@ -30,30 +30,17 @@ namespace NoteAndTask.Controllers
                 : BadRequest("Task list not added");
         }
 
-//        [Route("delete")]
-//        [HttpGet]
-//        public async Task<IActionResult> Delete(int? id)
-//        {
-//            if (id == null)
-//                return BadRequest("There is no list with id: " + id);
-//
-//            try
-//            {
-//                var list = _repository.GetById<TaskList>(id);
-//                foreach (var item in _repository.GetAll<TaskEntity>().Where(t => t.TaskListId == list.Id))
-//                {
-//                    item.TaskListId = null;
-//                }
-//                _repository.Delete(list);
-//
-//                await _repository.SaveAsync();
-//
-//                return Ok("List (id: " + id + ", name: " + list.Name + ") removed successfully!");
-//            }
-//            catch (Exception e)
-//            {
-//                return Json("Error: " + e);
-//            }
-//        }
+        [HttpGet("delete")]
+        public IActionResult Delete(int? id)
+        {
+            try
+            {
+                return _listRepository.Delete(id) ? (IActionResult) Ok("List removed successfully!") : BadRequest("There is no list with id: " + id);
+            }
+            catch (Exception e)
+            {
+                return Json("Error: " + e);
+            }
+        }
     }
 }

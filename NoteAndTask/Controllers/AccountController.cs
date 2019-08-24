@@ -22,6 +22,7 @@ namespace NoteAndTask.Controllers
 
             return Json(new UserDataViewModel()
             {
+                Id = user.Id,
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber

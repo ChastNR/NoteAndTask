@@ -9,21 +9,19 @@ namespace Repository.Repositories
 {
     public class ListRepository : IListRepository
     {
-        private const string connectionString = "Server=82.209.241.82;Database=NoneAndTaskDb;User Id=Tihon;Password=4Ayssahar0m;";
+        private const string ConnectionString = "Server=82.209.241.82;Database=NoneAndTaskDb;User Id=Tihon;Password=4Ayssahar0m;";
 
-        public IEnumerable<TaskList> Get(int userId, object orderBy)
+        public IEnumerable<TaskList> Get(int userId)
         {
             var lists = new List<TaskList>();
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                const string query = "SELECT * FROM TaskLists WHERE UserId = 'userId' ORDER BY 'orderBy' DESC";
-                connection.Open();
-
+                const string query = "SELECT * FROM TaskLists WHERE UserId = @userId ORDER BY CreationDate DESC";
                 var command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("userId", userId);
-                command.Parameters.AddWithValue("orderBy", orderBy);
+                command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
                 
+                connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
@@ -45,14 +43,14 @@ namespace Repository.Repositories
         {
             bool insertedData;
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                const string query = "INSERT INTO TaskLists (Name, UserId) VALUES ('name', 'userId')";
+                const string query = "INSERT INTO TaskLists (Name, UserId) VALUES (@name, @userId)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("name", name);
-                    command.Parameters.AddWithValue("userId", userId);   
+                    command.Parameters.Add("@name", SqlDbType.VarChar).Value = name;
+                    command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;   
                         
                     connection.Open();
                     insertedData = command.ExecuteNonQuery() > 0;
@@ -60,6 +58,26 @@ namespace Repository.Repositories
                 }
             }
             return insertedData;
+        }
+
+        public bool Delete(int? id)
+        {
+            bool deletedData;
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                const string query = "DELETE FROM TaskLists WHERE Id = @id";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;   
+                        
+                    connection.Open();
+                    deletedData = command.ExecuteNonQuery() > 0;
+                    connection.Close();
+                }
+            }
+            return deletedData;
         }
     }
 }

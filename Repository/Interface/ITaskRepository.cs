@@ -5,7 +5,8 @@ namespace Repository.Interface
 {
     public interface ITaskRepository
     {
-        IEnumerable<TaskEntity> Get(int? id, bool archived, int userId);
+        IEnumerable<TaskEntity> Get(int? taskListId, bool archived, int userId);
         void Create(TaskEntity task);
+        bool TaskDone(int? id);
     }
 }

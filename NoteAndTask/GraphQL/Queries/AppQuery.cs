@@ -9,7 +9,7 @@
 //{
 //    public class AppQuery : ObjectGraphType
 //    {
-//        public AppQuery(IRepository repository, Guid authenticatedUserId)
+//        public AppQuery(IListRepository listRepository,ITaskRepository taskRepository , int authenticatedUserId)
 //        {
 //            Field<ListGraphType<TaskListType>>(
 //                "lists",
@@ -24,6 +24,7 @@
 //                        if (id != null)
 //                        {
 //                            return repository.Get<TaskList>(l => l.Id == id && l.UserId == authenticatedUserId);
+//                            return listRepository.Get(authenticatedUserId)
 //                        }
 //
 //                        var name = context.GetArgument<string>("name");
