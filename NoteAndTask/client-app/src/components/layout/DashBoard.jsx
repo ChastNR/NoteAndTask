@@ -1,6 +1,5 @@
 import React from "react";
-import { request } from "../../libs/api";
-import { req } from "../../libs/gql";
+import lodash from "lodash";
 import { Link } from "react-router-dom";
 import "./Dashboard.css";
 import { Footer } from "./Footer";
@@ -9,32 +8,13 @@ import brandLogo from "../../images/brand-icon.png";
 export class DashBoard extends React.Component {
   static displayName = DashBoard.name;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: null
-    };
-
-    if (this.state.user === null) {
-      this.getUser();
-    }
-  }
-
-  getUser() {
-      request("/api/account/getuser").then(data => {
-        this.setState({ user: data["name"] });
-      });
-  }
-
-  // getUser() {
-  //   req({
-  //     query: "{users {name}}"
-  //   }).then(response => {
-  //     console.log(response.data.users["0"]["name"]);
-  //     this.setState({ user: response.data.users["0"]["name"] });
-  //   });
+  // handleClick = (e) => {
+  //   e.preventDefault();
+  //   return lodash.debounce( ,1000);
   // }
-
+  //
+  //
+  //
   render() {
     return (
       <div>
@@ -61,17 +41,11 @@ export class DashBoard extends React.Component {
                   <Link to="/notes" className="nav-link">
                     Notes
                   </Link>
-                  {/*<a className="nav-link" href="#">*/}
-                  {/*    Notes*/}
-                  {/*</a>*/}
                 </li>
                 <li className="nav-item">
                   <Link to="/archive" className="nav-link">
                     Archive
                   </Link>
-                  {/*<a className="nav-link" href="#">*/}
-                  {/*    Archive*/}
-                  {/*</a>*/}
                 </li>
               </ul>
             </div>
@@ -97,9 +71,7 @@ export class DashBoard extends React.Component {
                 </li>
                 <li className="nav-item">
                   <Link to="/settings" className="nav-link">
-                    <span className="mr-2">{this.state.user}</span>
-                    {/*<img src="../../images/user-icon.png" height="32" alt="User icon"*/}
-                    {/*/>*/}
+                    <span className="mr-2">My Profile</span>
                   </Link>
                 </li>
               </ul>

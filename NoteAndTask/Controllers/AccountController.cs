@@ -1,10 +1,8 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoteAndTask.Models.ViewModels;
 using Repository.Interface;
-using Repository.Models;
 
 namespace NoteAndTask.Controllers
 {

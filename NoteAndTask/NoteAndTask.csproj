@@ -25,7 +25,6 @@
 
 
   <ItemGroup>
-    <Content Include="client-app\src\components\layout\AddNewListModal.js" />
     <Content Include="client-app\src\components\SignUp.jsx" />
     <Content Remove="Data\**" />
   </ItemGroup>

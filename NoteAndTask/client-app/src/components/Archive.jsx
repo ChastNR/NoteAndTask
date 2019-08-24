@@ -10,11 +10,15 @@ export class Archive extends React.Component {
     super(props);
     this.state = { tasks: [], loading: false };
 
+    this.loadTasks();
+  }
+  
+  loadTasks() {
     request("/api/task/get?archived=true").then(data => {
       this.setState({ tasks: data, loading: true });
     });
   }
-
+  
   taskOpen = id => {
     const task = document.getElementById(id);
     if (task.style.display === "none" || task.style.display.length === 0) {

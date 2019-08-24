@@ -21,14 +21,18 @@ export class Lists extends React.Component {
   loadLists() {
     request("/api/list/get").then(data => {
       this.setState({ lists: data });
-    });
+    })
   }
 
   deleteTaskList = id => {
-    request("/api/list/delete?id=" + id);
+    request("/api/list/delete?id=" + id).then();
     this.loadLists();
-  };
+  }
 
+  // componentWillReceiveProps(newProps) {
+  //   this.loadLists(newProps)
+  // }
+  
   render() {
     return (
       <DashBoard>

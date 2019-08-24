@@ -25,7 +25,7 @@ namespace Repository.Repositories
                 {
                     while (dataReader.Read())
                     {
-                        user.Id = Convert.ToInt32(dataReader["Id"]);
+                        //user.Id = Convert.ToInt32(dataReader["Id"]);
                         user.Name = Convert.ToString(dataReader["Name"]);
                         user.Email = Convert.ToString(dataReader["Email"]);
                         user.PhoneNumber = Convert.ToString(dataReader["PhoneNumber"]);
