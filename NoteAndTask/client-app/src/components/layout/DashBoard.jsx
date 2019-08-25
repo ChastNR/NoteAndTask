@@ -8,13 +8,10 @@ import brandLogo from "../../images/brand-icon.png";
 export class DashBoard extends React.Component {
   static displayName = DashBoard.name;
 
-  // handleClick = (e) => {
-  //   e.preventDefault();
-  //   return lodash.debounce( ,1000);
-  // }
-  //
-  //
-  //
+  constructor(props) {
+    super(props);
+  }
+  
   render() {
     return (
       <div>
@@ -65,15 +62,15 @@ export class DashBoard extends React.Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link">
+                  <Link to="/settings" className="nav-link">
                     <i className="fas fa-cog" />
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link to="/settings" className="nav-link">
-                    <span className="mr-2">My Profile</span>
-                  </Link>
-                </li>
+                {/*<li className="nav-item">*/}
+                {/*  <Link to="/settings" className="nav-link">*/}
+                {/*    <span className="mr-2">My Profile</span>*/}
+                {/*  </Link>*/}
+                {/*</li>*/}
               </ul>
             </div>
           </nav>

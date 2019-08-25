@@ -1,5 +1,5 @@
 using GraphQL.Types;
-using Repository.Models;
+using ProjectModels;
 
 namespace NoteAndTask.GraphQL.Types
 {

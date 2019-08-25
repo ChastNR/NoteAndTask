@@ -68,6 +68,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\EFRepository\EFRepository.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Repository.Models;
+using ProjectModels;
 
 namespace Repository.Interface
 {

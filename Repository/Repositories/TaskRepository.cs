@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
+using ProjectModels;
 using Repository.Interface;
-using Repository.Models;
 
 namespace Repository.Repositories
 {

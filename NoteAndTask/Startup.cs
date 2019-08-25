@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Text;
+using EFRepository.Context;
+using EFRepository.Interface;
+using EFRepository.Repositories;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
@@ -45,14 +48,18 @@ namespace NoteAndTask
             services.AddTransient<IListRepository, ListRepository>();
             services.AddTransient<ITaskRepository, TaskRepository>();
             
-            //GraphQL
-//            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-//            services.AddScoped<AppSchema>();
-// 
-//            services.AddGraphQL(o => { o.ExposeExceptions = false; })
-//                .AddGraphTypes(ServiceLifetime.Scoped);
-            //GraphQL
             
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
+            });
+            services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
+            
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+           services.AddScoped<AppSchema>();
+
+            services.AddGraphQL(o => { o.ExposeExceptions = false; })
+               .AddGraphTypes(ServiceLifetime.Scoped);
             
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
@@ -103,8 +110,8 @@ namespace NoteAndTask
             app.UseCookiePolicy();
             
             
-            //app.UseGraphQL<AppSchema>();
-            //app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+            app.UseGraphQL<AppSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
             
             app.UseMvc(routes =>
             {

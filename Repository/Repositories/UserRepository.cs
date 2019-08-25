@@ -1,8 +1,8 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using ProjectModels;
 using Repository.Interface;
-using Repository.Models;
 
 namespace Repository.Repositories
 {

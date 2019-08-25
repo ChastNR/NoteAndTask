@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjectModels;
 using Repository.Interface;
-using Repository.Models;
 
 namespace NoteAndTask.Controllers
 {

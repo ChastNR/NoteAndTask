@@ -1,4 +1,4 @@
-export const req = async data => {
+export const graphQl = async data => {
   const response = await fetch("/api/data", {
     method: "POST",
     headers: {

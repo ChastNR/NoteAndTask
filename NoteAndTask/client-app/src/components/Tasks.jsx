@@ -4,7 +4,6 @@ import { DashBoard } from "./layout/DashBoard";
 import "./Tasks.css";
 import "./css/global.css";
 import { AddNewTaskModal } from "./layout/AddNewTaskModal";
-import { req } from "../libs/gql";
 
 export class Tasks extends React.Component {
   static displayName = Tasks.name;
