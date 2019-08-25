@@ -4,6 +4,6 @@ namespace NoteAndTask.Controllers
 {
     public class NoteController : Controller
     {
-        
+
     }
 }

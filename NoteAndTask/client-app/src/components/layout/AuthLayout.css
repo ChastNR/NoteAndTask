@@ -1,178 +1,176 @@
 .nav-item {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 #brand-logo {
-    font-size: 34px;
+  font-size: 34px;
 }
 
 header {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #mainHeader {
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 #frontpage {
-    background: url("../../images/main-page2.jpg") no-repeat;
-    background-size: cover;
+  background: url("../../images/main-page2.jpg") no-repeat;
+  background-size: cover;
 }
 
 @media (max-width: 768px) {
-    a {
-        color: white;
-    }
+  a {
+    color: white;
+  }
 }
 
 @media (min-width: 768px) {
-    a {
-        color: black;
-    }
+  a {
+    color: black;
+  }
 }
 
 a:hover {
-    color: rgb(0,200,255);
+  color: rgb(0, 200, 255);
 }
 
 .fa-bars {
-    color: white;
+  color: white;
 }
 
 @media (max-width: 768px) {
-    #mainHeader {
-        background: #000000;
-        background: rgba(0,0,0,0.85);
-    }
+  #mainHeader {
+    background: #000000;
+    background: rgba(0, 0, 0, 0.85);
+  }
 }
 
 #home {
-    padding-top: 150px;
-    padding-bottom: 150px;
+  padding-top: 150px;
+  padding-bottom: 150px;
 }
 
 #signInUpForm {
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
-    border-radius: 10px;
-    margin-right: 5px;
-    margin-left: 5px;
-    margin-top: 20px;
-    padding: 10px;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-top: 20px;
+  padding: 10px;
 }
 
 .card {
-    margin: 20px;
+  margin: 20px;
 }
 
 .card-img-top {
-    height: 294px;
-    width: 522px;
+  height: 294px;
+  width: 522px;
 }
 
-
 .contact-ul li {
-    margin: 10px;
+  margin: 10px;
 }
 
 .bordereffect {
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    border-color: black;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 7px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 7px;
 }
 
 .bordereffect:hover {
-    border-color: rgb(0,123,255);
+  border-color: rgb(0, 123, 255);
 }
 
-
 .bordereffect img {
-    height: 48px;
-    margin: 5px;
+  height: 48px;
+  margin: 5px;
 }
 
 .contact-li img {
-    height: 32px;
+  height: 32px;
 }
 
 .contact-li a {
-    color: white;
-    margin: 5px;
+  color: white;
+  margin: 5px;
 }
 
 .contact-li span {
-    margin: 5px;
+  margin: 5px;
 }
 
 .contact-li a:hover {
-    background: -webkit-linear-gradient(0.2turn, cyan, #0099ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(0.2turn, cyan, #0099ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 #about {
-    padding-top: 100px;
-    padding-bottom: 100px;
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
 
 #whatido {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 #experiences {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 #message {
-    height: 145px;
+  height: 145px;
 }
 
 #follow {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 #contact {
-    padding: 20px;
-    background: rgb(44,44,44);
-    color: white !important;
+  padding: 20px;
+  background: rgb(44, 44, 44);
+  color: white !important;
 }
 
 .social-links img {
-    height: 64px;
-    margin-left: 10px;
-    margin-right: 10px;
+  height: 64px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .social-links {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 footer {
-    padding: 20px;
+  padding: 20px;
 }
 
 .skills li {
-    border-color: darkblue;
-    border-radius: 8%;
-    border-width: 1px;
-    border-style: solid;
-    margin: 5px;
-    padding: 5px;
+  border-color: darkblue;
+  border-radius: 8%;
+  border-width: 1px;
+  border-style: solid;
+  margin: 5px;
+  padding: 5px;
 }

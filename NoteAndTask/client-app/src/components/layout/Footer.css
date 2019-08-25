@@ -1,28 +1,27 @@
 footer {
-    width: 90vw;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 0.85em;
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .footer-links {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .footer-links li {
-    float: left;
-    margin-left: 2em;
+  float: left;
+  margin-left: 2em;
 }
 
 .footer-links li a {
-    color: gray;
+  color: gray;
 }
 
 .footer-links li a:hover {
-    color: #591df1;
+  color: #591df1;
 }
 .footer-links li a:hover:before {
-    visibility: visible;
-    -webkit-transform: scaleX(1);
-    transform: scaleX(1);
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
 }

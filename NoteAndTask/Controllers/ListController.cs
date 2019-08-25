@@ -13,10 +13,10 @@ namespace NoteAndTask.Controllers
     {
         private readonly IListRepository _listRepository;
         public ListController(IListRepository listRepository) => _listRepository = listRepository;
-        
+
         [HttpGet("get")]
         public IEnumerable<TaskList> Get() => _listRepository.Get(Convert.ToInt32(User.Identity.Name));
-        
+
         [HttpPost("add")]
         public IActionResult Add(string name)
         {
@@ -24,7 +24,7 @@ namespace NoteAndTask.Controllers
                 return BadRequest("Cant add list with empty name " + name);
 
             return _listRepository.Add(name, Convert.ToInt32(User.Identity.Name))
-                ? (IActionResult) Ok("Task list " + name + " added!")
+                ? (IActionResult)Ok("Task list " + name + " added!")
                 : BadRequest("Task list not added");
         }
 
@@ -33,7 +33,7 @@ namespace NoteAndTask.Controllers
         {
             try
             {
-                return _listRepository.Delete(id) ? (IActionResult) Ok("List removed successfully!") : BadRequest("There is no list with id: " + id);
+                return _listRepository.Delete(id) ? (IActionResult)Ok("List removed successfully!") : BadRequest("There is no list with id: " + id);
             }
             catch (Exception e)
             {

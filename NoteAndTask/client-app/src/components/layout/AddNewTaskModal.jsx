@@ -1,33 +1,36 @@
 import React from "react";
-import Modal from "react-modal";
-import "./AddNewTaskModal.css";
+import {
+  Modal,
+  Button,
+  SelectPicker,
+  DatePicker,
+  Alert,
+  ControlLabel,
+  Form,
+  FormControl,
+  FormGroup,
+  HelpBlock
+} from "rsuite";
 import { request } from "../../libs/api";
-import "../css/global.css";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
 
 export class AddNewTaskModal extends React.Component {
   static displayName = AddNewTaskModal.name;
 
   constructor(props) {
     super(props);
-
     this.state = {
-      modalIsOpen: false,
+      show: false,
       lists: null
     };
+    this.close = this.close.bind(this);
+    this.open = this.open.bind(this);
+  }
 
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+  close() {
+    this.setState({ show: false });
+  }
+  open() {
+    this.setState({ show: true });
   }
 
   loadLists() {
@@ -42,7 +45,7 @@ export class AddNewTaskModal extends React.Component {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
-      var formData;
+      let formData;
 
       if (event.target.listId.value.length === 0) {
         formData = {
@@ -67,102 +70,93 @@ export class AddNewTaskModal extends React.Component {
         },
         body: JSON.stringify(formData)
       });
-      this.closeModal();
+      this.close();
+      Alert.info("New task added", 3000);
     } else {
       event.target.reportValidity();
     }
   };
 
-  openModal() {
-    this.setState({ modalIsOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
-  }
-
   render() {
     return (
-      <div>
-        <button
-          type="button"
-          className="link-button"
+      <div className="modal-container">
+        <Button
+          color="blue"
+          appearance="ghost"
           onClick={() => {
-            this.openModal();
+            this.open();
             this.loadLists();
           }}
         >
           Add new task
-        </button>
+        </Button>
 
-        <Modal
-          className="modal-shadow"
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          ariaHideApp={false}
-          style={customStyles}
-        >
-          <div className="modal-header">
-            <h5 className="modal-title">Add new task</h5>
-            <button type="button" className="close" onClick={this.closeModal}>
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="control-label">Name:</label>
-                <input
-                  type="text"
-                  name="name"
-                  className="form-control"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label className="control-label">Description:</label>
-                <textarea
+        <Modal show={this.state.show} onHide={this.close}>
+          <Modal.Header>
+            <Modal.Title>Add new task</Modal.Title>
+          </Modal.Header>
+          <Form fluid onSubmit={this.handleSubmit}>
+            <Modal.Body>
+              <FormGroup>
+                <ControlLabel>Name:</ControlLabel>
+                <FormControl type="text" name="name" required />
+                <HelpBlock>Required</HelpBlock>
+              </FormGroup>
+              <FormGroup>
+                <ControlLabel>Description:</ControlLabel>
+                <FormControl
                   name="description"
-                  className="form-control"
+                  componentClass="textarea"
                   rows="4"
                   cols="50"
                   required
                 />
-              </div>
-              <div className="form-group">
-                <label className="control-label">Expires on?</label>
-                <input
-                  name="expiresOn"
-                  className="form-control"
+                <HelpBlock>Required</HelpBlock>
+              </FormGroup>
+              <FormGroup>
+                <ControlLabel>Expires on?</ControlLabel>
+                <DatePicker
                   type="datetime-local"
+                  format="YYYY-MM-DD HH:mm"
                   required
+                  block
+                  name="expiresOn"
+                  ranges={[
+                    {
+                      label: "Now",
+                      value: new Date()
+                    }
+                  ]}
                 />
-              </div>
-              <div className="form-group">
-                <label className="control-label">Choose Task List:</label>
+                <HelpBlock>Required</HelpBlock>
+                {/*<input*/}
+                {/*  name="expiresOn"*/}
+                {/*  className="form-control"*/}
+                {/*  type="datetime-local"*/}
+                {/*  required*/}
+                {/*/>*/}
+              </FormGroup>
+              <FormGroup>
+                <ControlLabel>Choose Task List:</ControlLabel>
                 {this.state.lists && (
-                  <select name="listId" className="form-control">
-                    <option />
-                    {this.state.lists.map(list => (
-                      <option value={list.id}>{list.name}</option>
-                    ))}
-                  </select>
+                  <SelectPicker
+                    name="listId"
+                    searchable={false}
+                    block
+                    data={this.state.lists}
+                  ></SelectPicker>
                 )}
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-outline-danger"
-                onClick={this.closeModal}
-              >
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.close} appearance="subtle">
                 Close
-              </button>
-              <button type="submit" className="btn btn-outline-primary">
+              </Button>
+              <Button type="submit" appearance="primary">
                 Add
-              </button>
-            </div>
-          </form>
+              </Button>
+            </Modal.Footer>
+          </Form>
         </Modal>
       </div>
     );

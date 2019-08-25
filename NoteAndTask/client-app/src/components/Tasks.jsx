@@ -1,9 +1,10 @@
 import React from "react";
 import { request } from "../libs/api";
 import { DashBoard } from "./layout/DashBoard";
-import "./Tasks.css";
-import "./css/global.css";
 import { AddNewTaskModal } from "./layout/AddNewTaskModal";
+import { Button, Divider, Row } from "rsuite";
+import "../styles/default.css";
+import "./Tasks.css";
 
 export class Tasks extends React.Component {
   static displayName = Tasks.name;
@@ -26,7 +27,7 @@ export class Tasks extends React.Component {
       });
     }
   }
-  
+
   componentWillReceiveProps(newProps) {
     this.loadTasks(newProps.match.params.id);
   }
@@ -48,15 +49,15 @@ export class Tasks extends React.Component {
   render() {
     return (
       <DashBoard>
-        <div className="task-card shadow-sm">
-          <div className="row align-items-center task-card-name">
+        <div className="task-card shadow-box">
+          <Row className="task-card-name">
             <AddNewTaskModal />
-          </div>
+          </Row>
         </div>
         {this.state.tasks && (
           <div>
             {this.state.tasks.map(task => (
-              <div className="task-card shadow-sm" key={task.id}>
+              <div className="task-card shadow-box" key={task.id}>
                 <div
                   className="row align-items-center task-card-name"
                   onClick={() => this.taskOpen(task.id)}
@@ -66,18 +67,12 @@ export class Tasks extends React.Component {
                   </div>
                 </div>
                 <div className="task-card-body" id={task.id}>
-                  <hr />
+                  <Divider>Description</Divider>
                   <div>{task.description}</div>
-                  <hr />
-                  <div className="card-done-button">
-                    <a
-                      href="#"
-                      className="card-done-button"
-                      onClick={() => this.taskDone(task.id)}
-                    >
-                      Done
-                    </a>
-                  </div>
+                  <Divider />
+                  <Button onClick={() => this.taskDone(task.id)} color="blue">
+                    Done
+                  </Button>
                 </div>
               </div>
             ))}

@@ -35,13 +35,13 @@ namespace EFRepository.Repositories
                 query = query.Where(filter);
             }
 
-//            foreach (var includeProperty in includeProperties.Split
-//                (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-//            {
-//                query = query.Include(includeProperty);
-//            }
+            //            foreach (var includeProperty in includeProperties.Split
+            //                (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            //            {
+            //                query = query.Include(includeProperty);
+            //            }
 
-            query = includeProperties.Split(new[] {','},
+            query = includeProperties.Split(new[] { ',' },
                 StringSplitOptions.RemoveEmptyEntries).
                 Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
 

@@ -13,7 +13,7 @@ namespace NoteAndTask.Controllers
     {
         private readonly ITaskRepository _taskRepository;
         public TaskController(ITaskRepository taskRepository) => _taskRepository = taskRepository;
-        
+
         [HttpGet("get")]
         public IEnumerable<TaskEntity> Get(int? id, bool archived) => _taskRepository.Get(id, archived, Convert.ToInt32(User.Identity.Name));
 
@@ -38,7 +38,7 @@ namespace NoteAndTask.Controllers
         {
             try
             {
-                return _taskRepository.TaskDone(id) ? (IActionResult) Ok("Task moved to archive successfully") : BadRequest("Cant add task (id: " + id + ") to archive");
+                return _taskRepository.TaskDone(id) ? (IActionResult)Ok("Task moved to archive successfully") : BadRequest("Cant add task (id: " + id + ") to archive");
             }
             catch (Exception e)
             {

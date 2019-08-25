@@ -1,5 +1,16 @@
 import React from "react";
 import { AuthLayout } from "./layout/AuthLayout";
+import {
+  Button,
+  ButtonToolbar,
+  Content,
+  ControlLabel,
+  FlexboxGrid,
+  Form,
+  FormControl,
+  FormGroup,
+  Panel
+} from "rsuite";
 
 export class SignIn extends React.Component {
   static displayName = SignIn.name;
@@ -10,8 +21,7 @@ export class SignIn extends React.Component {
     if (event.target.checkValidity()) {
       const formData = {
         login: event.target.login.value,
-        password: event.target.password.value,
-        confirmPassword: event.target.confirmPassword.value
+        password: event.target.password.value
       };
 
       await fetch("api/auth/signin", {
@@ -36,47 +46,32 @@ export class SignIn extends React.Component {
   render() {
     return (
       <AuthLayout>
-        <div className="col-md-5 text-center shadow bg-light" id="signInUpForm">
-          <form id="signInForm" onSubmit={this.handleSubmit}>
-            <h2 className="mb-4 mt-0 text-center">Sign In</h2>
-            <div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="login"
-                  placeholder="Your login"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="password"
-                  placeholder="Password"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="confirmPassword"
-                  placeholder="Confirm password"
-                  required
-                />
-              </div>
-            </div>
-            <div>
-              <input
-                className="btn btn-primary"
-                type="submit"
-                value="Sign in"
-              />
-            </div>
-          </form>
-        </div>
+        <Content>
+          <FlexboxGrid justify="center">
+            <FlexboxGrid.Item colspan={12}>
+              <Panel className="shadow-box" header={<h3>Sign In</h3>} bordered>
+                <Form fluid id="signInForm" onSubmit={this.handleSubmit}>
+                  <FormGroup>
+                    <ControlLabel>Email or phone number</ControlLabel>
+                    <FormControl type="text" name="login" required />
+                  </FormGroup>
+                  <FormGroup>
+                    <ControlLabel>Password</ControlLabel>
+                    <FormControl type="text" name="password" required />
+                  </FormGroup>
+                  <FormGroup>
+                    <ButtonToolbar>
+                      <Button type="submit" appearance="primary">
+                        Sign in
+                      </Button>
+                      <Button appearance="link">Forgot password?</Button>
+                    </ButtonToolbar>
+                  </FormGroup>
+                </Form>
+              </Panel>
+            </FlexboxGrid.Item>
+          </FlexboxGrid>
+        </Content>
       </AuthLayout>
     );
   }

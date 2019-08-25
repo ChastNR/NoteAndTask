@@ -12,27 +12,27 @@ namespace Repository.Repositories
         private const string ConnectionString = "Server=82.209.241.82;Database=NoneAndTaskDb;User Id=Tihon;Password=4Ayssahar0m;";
 
         #region Get
-        
+
         public IEnumerable<TaskEntity> Get(int? taskListId, bool archived, int userId)
         {
             if (taskListId != null)
             {
                 return GetWithListId(taskListId, userId);
             }
-            
+
             return archived ? GetArchived(userId) : GetDefault(userId);
         }
 
         private static IEnumerable<TaskEntity> GetArchived(int userId)
         {
             var tasks = new List<TaskEntity>();
-            
+
             using (var connection = new SqlConnection(ConnectionString))
             {
                 const string query = "SELECT * FROM Tasks WHERE IsDone = 'true' AND UserId = @userId";
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -52,18 +52,18 @@ namespace Repository.Repositories
             }
             return tasks;
         }
-        
+
         private static IEnumerable<TaskEntity> GetWithListId(int? taskListId, int userId)
         {
             var tasks = new List<TaskEntity>();
-            
+
             using (var connection = new SqlConnection(ConnectionString))
             {
                 const string query = "SELECT * FROM Tasks WHERE IsDone = 'false' AND TaskListId = @taskListId AND UserId = @userId";
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@taskListId", SqlDbType.Int).Value = taskListId;
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -87,14 +87,14 @@ namespace Repository.Repositories
         private static IEnumerable<TaskEntity> GetDefault(int userId)
         {
             var tasks = new List<TaskEntity>();
-            
+
             using (var connection = new SqlConnection(ConnectionString))
             {
                 const string query = "SELECT * FROM Tasks WHERE IsDone = 'false' AND TaskListId IS NULL AND UserId = @userId";
-                
+
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -116,7 +116,7 @@ namespace Repository.Repositories
         }
 
         #endregion
-        
+
         #region Create
 
         public void Create(TaskEntity task)
@@ -125,7 +125,7 @@ namespace Repository.Repositories
             {
                 CreateWithListId(task);
             }
-            
+
             CreateWithoutListId(task);
         }
 
@@ -141,15 +141,15 @@ namespace Repository.Repositories
                     command.Parameters.Add("@userId", SqlDbType.Int).Value = task.UserId;
                     command.Parameters.Add("@taskListId", SqlDbType.Int).Value = task.TaskListId;
                     command.Parameters.Add("@expiresOn", SqlDbType.DateTime2).Value = task.ExpiresOn;
-                    
+
                     //command.CommandType = CommandType.Text;
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
-                }  
+                }
             }
         }
-        
+
         private static void CreateWithoutListId(TaskEntity task)
         {
             const string query = "INSERT INTO Tasks (Name, Description, ExpiresOn, IsDone, UserId) VALUES (@name, @description, @expiresOn ,'false', @userId)";
@@ -161,12 +161,12 @@ namespace Repository.Repositories
                     command.Parameters.Add("@description", SqlDbType.VarChar).Value = task.Description;
                     command.Parameters.Add("@userId", SqlDbType.Int).Value = Convert.ToInt32(task.UserId);
                     command.Parameters.Add("@expiresOn", SqlDbType.DateTime2).Value = task.ExpiresOn;
-                    
+
                     //command.CommandType = CommandType.Text;
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
-                }  
+                }
             }
         }
 
@@ -184,8 +184,8 @@ namespace Repository.Repositories
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.Add("@id", SqlDbType.Int).Value = id; 
-                        
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
                     connection.Open();
                     done = command.ExecuteNonQuery() > 0;
                     connection.Close();

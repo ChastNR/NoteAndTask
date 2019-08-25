@@ -1,18 +1,13 @@
 import React from "react";
-import Modal from "react-modal";
-import "./AddListModal.css";
-import "../css/global.css";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
+import {
+  Button,
+  ControlLabel,
+  Form,
+  FormControl,
+  FormGroup,
+  HelpBlock,
+  Modal
+} from "rsuite";
 
 export class AddListModal extends React.Component {
   static displayName = AddListModal.name;
@@ -21,12 +16,18 @@ export class AddListModal extends React.Component {
     super(props);
 
     this.state = {
-      modalIsOpen: false,
-      lists: null
+      show: false
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.close = this.close.bind(this);
+    this.open = this.open.bind(this);
+  }
+
+  close() {
+    this.setState({ show: false });
+  }
+  open() {
+    this.setState({ show: true });
   }
 
   handleSubmit = async event => {
@@ -39,65 +40,40 @@ export class AddListModal extends React.Component {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token")
         }
-      }).then(this.closeModal());
+      });
+      this.close();
     } else {
       event.target.reportValidity();
     }
   };
 
-  openModal() {
-    this.setState({ modalIsOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
-  }
-
   render() {
     return (
-      <div>
-        <div className="addButton">
-          <button
-            type="button"
-            className="link-button"
-            onClick={() => this.openModal()}
-          >
-            Add new list
-          </button>
-        </div>
-        <Modal
-          className="modal-shadow"
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          ariaHideApp={false}
-          style={customStyles}
-        >
-          <div className="modal-header">
-            <h5 className="modal-title">Add new list</h5>
-            <button type="button" className="close" onClick={this.closeModal}>
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="control-label">Name:</label>
-                <input type="text" name="name" className="form-control" />
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-outline-danger"
-                onClick={this.closeModal}
-              >
-                Close
-              </button>
-              <button type="submit" className="btn btn-outline-primary">
+      <div className="modal-container">
+        <Button color="blue" appearance="ghost" onClick={this.open}>
+          Add new list
+        </Button>
+        <Modal show={this.state.show} onHide={this.close}>
+          <Modal.Header>
+            <Modal.Title>Add new list</Modal.Title>
+          </Modal.Header>
+          <Form fluid onSubmit={this.handleSubmit}>
+            <Modal.Body>
+              <FormGroup>
+                <ControlLabel>Name:</ControlLabel>
+                <FormControl type="text" name="name" />
+                <HelpBlock>Required</HelpBlock>
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.close} appearance="subtle">
+                Cancel
+              </Button>
+              <Button appearance="primary" type="submit">
                 Add
-              </button>
-            </div>
-          </form>
+              </Button>
+            </Modal.Footer>
+          </Form>
         </Modal>
       </div>
     );

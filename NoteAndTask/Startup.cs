@@ -43,24 +43,24 @@ namespace NoteAndTask
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailSender, EmailSender>();
-            
+
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IListRepository, ListRepository>();
             services.AddTransient<ITaskRepository, TaskRepository>();
-            
-            
+
+
             services.AddDbContext<ApplicationContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
             });
             services.AddTransient<IRepository, EfRepository<ApplicationContext>>();
-            
+
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-           services.AddScoped<AppSchema>();
+            services.AddScoped<AppSchema>();
 
             services.AddGraphQL(o => { o.ExposeExceptions = false; })
                .AddGraphTypes(ServiceLifetime.Scoped);
-            
+
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
             var authConfig = Configuration.GetSection("AuthOptions").Get<AuthOptions>();
@@ -85,7 +85,7 @@ namespace NoteAndTask
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-            
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client-app/build"; });
         }
@@ -108,11 +108,11 @@ namespace NoteAndTask
             app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
             app.UseCookiePolicy();
-            
-            
+
+
             app.UseGraphQL<AppSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

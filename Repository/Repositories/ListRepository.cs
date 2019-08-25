@@ -20,7 +20,7 @@ namespace Repository.Repositories
                 const string query = "SELECT * FROM TaskLists WHERE UserId = @userId ORDER BY CreationDate DESC";
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -50,8 +50,8 @@ namespace Repository.Repositories
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.Add("@name", SqlDbType.VarChar).Value = name;
-                    command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;   
-                        
+                    command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
                     connection.Open();
                     insertedData = command.ExecuteNonQuery() > 0;
                     connection.Close();
@@ -70,8 +70,8 @@ namespace Repository.Repositories
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;   
-                        
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
                     connection.Open();
                     deletedData = command.ExecuteNonQuery() > 0;
                     connection.Close();

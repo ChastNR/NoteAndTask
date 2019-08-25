@@ -28,7 +28,7 @@ namespace NoteAndTask.Controllers
         {
             try
             {
-              return !ModelState.IsValid ? (IActionResult) Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})") : Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
+                return !ModelState.IsValid ? (IActionResult)Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})") : Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
             }
             catch (Exception e)
             {
@@ -38,31 +38,31 @@ namespace NoteAndTask.Controllers
 
         #region  Backup
 
-//        [HttpPost("signin")]
-//                public IActionResult SignIn([FromBody] LoginViewModel model)
-//                {
-//                    if (model.Password != model.ConfirmPassword)
-//                    {
-//                        return Json($"Please, check written passwords (password: {model.Password}, password confirm: {model.ConfirmPassword})");
-//                    }
-//        
-//                    if (!ModelState.IsValid)
-//                    {
-//                        return Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})");
-//                    }
-//                    
-//                    try
-//                    {
-//                      return Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
-//                    }
-//                    catch (Exception e)
-//                    {
-//                        return Json($"Error: {e}");
-//                    }
-//                }
+        //        [HttpPost("signin")]
+        //                public IActionResult SignIn([FromBody] LoginViewModel model)
+        //                {
+        //                    if (model.Password != model.ConfirmPassword)
+        //                    {
+        //                        return Json($"Please, check written passwords (password: {model.Password}, password confirm: {model.ConfirmPassword})");
+        //                    }
+        //        
+        //                    if (!ModelState.IsValid)
+        //                    {
+        //                        return Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})");
+        //                    }
+        //                    
+        //                    try
+        //                    {
+        //                      return Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
+        //                    }
+        //                    catch (Exception e)
+        //                    {
+        //                        return Json($"Error: {e}");
+        //                    }
+        //                }
 
         #endregion
-        
+
         [HttpPost("signup")]
         public IActionResult SignUp([FromBody] RegisterViewModel model)
         {
@@ -75,10 +75,10 @@ namespace NoteAndTask.Controllers
                     PhoneNumber = model.PhoneNumber,
                     PasswordHash = model.Password
                 });
-                
+
                 return _userRepository.UserExist(model.Email, model.PhoneNumber) != null
                     ? BadRequest("There is another user with the same email or mobile number")
-                    : (IActionResult) Ok("Success");
+                    : (IActionResult)Ok("Success");
             }
             catch (Exception e)
             {

@@ -2,6 +2,7 @@ import React from "react";
 import { request } from "../libs/api";
 import { DashBoard } from "./layout/DashBoard";
 import "./Tasks.css";
+import "../styles/default.css";
 
 export class Archive extends React.Component {
   static displayName = Archive.name;
@@ -12,13 +13,13 @@ export class Archive extends React.Component {
 
     this.loadTasks();
   }
-  
+
   loadTasks() {
     request("/api/task/get?archived=true").then(data => {
       this.setState({ tasks: data, loading: true });
     });
   }
-  
+
   taskOpen = id => {
     const task = document.getElementById(id);
     if (task.style.display === "none" || task.style.display.length === 0) {
@@ -28,32 +29,6 @@ export class Archive extends React.Component {
     }
   };
 
-  renderTasks(tasks) {
-    return (
-      <div className="row">
-        {tasks.map(task => (
-          <div className="card m-3 shadow-sm" key={task.id}>
-            <div className="card-header">
-              <h6>
-                <i className="fas fa-thumbtack mr-2" />
-                {task.name}
-              </h6>
-            </div>
-            <div className="card-body">
-              <p className="card-text">{task.description}</p>
-            </div>
-            <div className="card-footer">
-              <div className="small">Created: {task.creationDate}</div>
-              <div className="small">
-                <span>Expires:</span> {task.expiresOn}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   render() {
     return (
       <DashBoard>
@@ -61,7 +36,7 @@ export class Archive extends React.Component {
           <div>
             {this.state.tasks.map(task => (
               <div
-                className="task-card shadow-sm"
+                className="task-card shadow-box"
                 key={task.id}
                 onClick={() => this.taskOpen(task.id)}
               >

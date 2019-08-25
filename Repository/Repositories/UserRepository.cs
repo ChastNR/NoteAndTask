@@ -19,7 +19,7 @@ namespace Repository.Repositories
                 const string query = "SELECT * FROM Users WHERE Id = @id";
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -46,7 +46,7 @@ namespace Repository.Repositories
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
                 command.Parameters.Add("@loginAlt", SqlDbType.VarChar).Value = login;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -70,7 +70,7 @@ namespace Repository.Repositories
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
                 command.Parameters.Add("@phoneNumber", SqlDbType.VarChar).Value = phoneNumber;
-                
+
                 connection.Open();
                 using (var dataReader = command.ExecuteReader())
                 {
@@ -93,10 +93,10 @@ namespace Repository.Repositories
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.Add("@name", SqlDbType.VarChar).Value = user.Name;
-                    command.Parameters.Add("@email", SqlDbType.VarChar).Value =  user.Email;
+                    command.Parameters.Add("@email", SqlDbType.VarChar).Value = user.Email;
                     command.Parameters.Add("@passwordHash", SqlDbType.VarChar).Value = user.PasswordHash;
-                    command.Parameters.Add("@phoneNumber", SqlDbType.VarChar).Value =  user.PhoneNumber;
-                    
+                    command.Parameters.Add("@phoneNumber", SqlDbType.VarChar).Value = user.PhoneNumber;
+
                     //command.CommandType = CommandType.Text;
                     connection.Open();
                     command.ExecuteNonQuery();

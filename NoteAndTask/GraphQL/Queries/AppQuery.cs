@@ -19,33 +19,33 @@ namespace NoteAndTask.GraphQL.Queries
                     ),
                 resolve: context =>
                 {
-                        var id = context.GetArgument<int>("id");
-                        if (id > 0)
-                        {
-                            return repository.Get<TaskList>(l => l.Id == id);
-                        }
+                    var id = context.GetArgument<int>("id");
+                    if (id > 0)
+                    {
+                        return repository.Get<TaskList>(l => l.Id == id);
+                    }
 
-                        var name = context.GetArgument<string>("name");
-                        if (!string.IsNullOrWhiteSpace(name))
-                        {
-                            return repository.Get<TaskList>(l => l.Name == name);
-                        }
+                    var name = context.GetArgument<string>("name");
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        return repository.Get<TaskList>(l => l.Name == name);
+                    }
 
-                        var userId = context.GetArgument<int>("userId");
-                        if (userId > 0)
-                        {
-                            return repository.Get<TaskList>(l => l.UserId == userId);
-                        }
+                    var userId = context.GetArgument<int>("userId");
+                    if (userId > 0)
+                    {
+                        return repository.Get<TaskList>(l => l.UserId == userId);
+                    }
 
-//                        var creationDate = context.GetArgument<DateTime>("creationDate");
-//                        if (creationDate != null)
-//                        {
-//                            return repository.Get<TaskList>(l => l.CreationDate == creationDate);
-//                        }
+                    //                        var creationDate = context.GetArgument<DateTime>("creationDate");
+                    //                        if (creationDate != null)
+                    //                        {
+                    //                            return repository.Get<TaskList>(l => l.CreationDate == creationDate);
+                    //                        }
 
-                        return repository.GetAll<TaskList>(null, "Tasks");
-                    
-                    
+                    return repository.GetAll<TaskList>(null, "Tasks");
+
+
                 });
 
             Field<ListGraphType<TaskEntityType>>(
@@ -55,20 +55,20 @@ namespace NoteAndTask.GraphQL.Queries
                         new QueryArgument<StringGraphType> { Name = "name", Description = "The name of the task" }),
                     resolve: context =>
                     {
-                            var id = context.GetArgument<int>("id");
-                            if (id > 0)
-                            {
-                                return repository.Get<TaskEntity>(t => t.Id == id);
-                            }
+                        var id = context.GetArgument<int>("id");
+                        if (id > 0)
+                        {
+                            return repository.Get<TaskEntity>(t => t.Id == id);
+                        }
 
-                            var name = context.GetArgument<string>("name");
-                            if (!string.IsNullOrWhiteSpace(name))
-                            {
-                                return repository.Get<TaskEntity>(t => t.Name == name);
-                            }
+                        var name = context.GetArgument<string>("name");
+                        if (!string.IsNullOrWhiteSpace(name))
+                        {
+                            return repository.Get<TaskEntity>(t => t.Name == name);
+                        }
 
-                            return repository.GetAll<TaskEntity>();
-                        
+                        return repository.GetAll<TaskEntity>();
+
                     });
         }
     }
