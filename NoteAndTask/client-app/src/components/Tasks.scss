@@ -1,0 +1,26 @@
+.task-card {
+  background-color: white;
+  border-radius: 5px;
+  /*border: #0099ff 1px solid;*/
+  padding: 10px;
+  margin: 10px;
+}
+
+.task-card:hover > .task-card-body hr {
+  color: #591df1;
+  background-color: #591df1;
+
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.task-card-name {
+  margin: 5px;
+}
+
+.task-card-body {
+  display: none;
+  margin-left: 5px;
+}
