@@ -1,8 +1,8 @@
 import React from "react";
 import { request } from "../libs/api";
 import { DashBoard } from "./layout/DashBoard";
-import "./Tasks.css";
-import "../styles/default.css";
+import "./Tasks.scss";
+import "../styles/default.scss";
 
 export class Archive extends React.Component {
   static displayName = Archive.name;

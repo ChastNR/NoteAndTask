@@ -3,7 +3,7 @@ import { Navbar, Nav } from "rsuite";
 import { Link } from "react-router-dom";
 import lodash from "lodash";
 import { Footer } from "./Footer";
-import "../../styles/default.css";
+import "../../styles/default.scss";
 
 export class DashBoard extends React.Component {
   static displayName = DashBoard.name;

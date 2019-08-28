@@ -3,7 +3,7 @@ import { DashBoard } from "./layout/DashBoard";
 import { request } from "../libs/api";
 import { Link } from "react-router-dom";
 import { AddListModal } from "./layout/AddListModal";
-import "../styles/default.css";
+import "../styles/default.scss";
 import { Button } from "rsuite";
 
 export class Lists extends React.Component {
