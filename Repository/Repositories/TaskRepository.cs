@@ -43,7 +43,8 @@ namespace Repository.Repositories
                             Id = Convert.ToInt32(dataReader["Id"]),
                             Name = Convert.ToString(dataReader["Name"]),
                             Description = Convert.ToString(dataReader["Description"]),
-                            ExpiresOn = Convert.ToDateTime(dataReader["ExpiresOn"])
+                            ExpiresOn = Convert.ToDateTime(dataReader["ExpiresOn"]),
+                            IsDone = Convert.ToBoolean(dataReader["isDone"])
                         };
                         tasks.Add(task);
                     }

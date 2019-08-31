@@ -1,27 +1,17 @@
 import React from "react";
-import {
-  Modal,
-  Button,
-  SelectPicker,
-  DatePicker,
-  Alert,
-  ControlLabel,
-  Form,
-  FormControl,
-  FormGroup,
-  HelpBlock
-} from "rsuite";
+import { Modal, Button, DatePicker, Alert, ControlLabel, Form, FormGroup, HelpBlock } from "rsuite";
 import { request } from "../../libs/api";
+import { IList } from "../../interfaces/IList";
 
-export class AddNewTaskModal extends React.Component {
-  static displayName = AddNewTaskModal.name;
+interface ITaskModalWindow {
+  show: boolean
+  lists: IList[]
+}
 
-  constructor(props) {
+export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
+  constructor(props: any) {
     super(props);
-    this.state = {
-      show: false,
-      lists: null
-    };
+    this.state = { show: false, lists: [] };
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
   }
@@ -34,14 +24,13 @@ export class AddNewTaskModal extends React.Component {
   }
 
   loadLists() {
-    if (this.state.lists == null) {
-      request("/api/list/get").then(data => {
-        this.setState({ lists: data });
-      });
-    }
+    request("/api/list/get").then(data => {
+      this.setState({ lists: data })
+      console.log(data)
+    });
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event: any) => {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
@@ -80,73 +69,46 @@ export class AddNewTaskModal extends React.Component {
   render() {
     return (
       <div className="modal-container">
-        <Button
-          color="blue"
-          appearance="ghost"
-          onClick={() => {
-            this.open();
-            this.loadLists();
-          }}
-        >
-          Add new task
+        <Button color="blue" appearance="ghost" onClick={() => { this.open(); this.loadLists(); }} >
+          +
         </Button>
-
         <Modal show={this.state.show} onHide={this.close}>
-          <Modal.Header>
+          {/* <Modal.Header>
             <Modal.Title>Add new task</Modal.Title>
-          </Modal.Header>
+          </Modal.Header> */}
           <Form fluid onSubmit={this.handleSubmit}>
             <Modal.Body>
               <FormGroup>
                 <ControlLabel>Name:</ControlLabel>
-                <FormControl type="text" name="name" required />
+                <input className="rs-input" type="text" name="name" required />
                 <HelpBlock>Required</HelpBlock>
               </FormGroup>
               <FormGroup>
                 <ControlLabel>Description:</ControlLabel>
-                <FormControl
-                  name="description"
-                  componentClass="textarea"
-                  rows="4"
-                  cols="50"
-                  required
-                />
+                <textarea className="rs-input" name="description" required />
                 <HelpBlock>Required</HelpBlock>
               </FormGroup>
               <FormGroup>
                 <ControlLabel>Expires on?</ControlLabel>
-                <DatePicker
-                  type="datetime-local"
-                  format="YYYY-MM-DD HH:mm"
-                  required
-                  block
-                  name="expiresOn"
-                  ranges={[
-                    {
-                      label: "Now",
-                      value: new Date()
-                    }
-                  ]}
+                <DatePicker type="datetime-local" format="YYYY-MM-DD HH:mm" required block name="expiresOn" ranges={[
+                  {
+                    label: "Now",
+                    value: new Date()
+                  }
+                ]}
                 />
                 <HelpBlock>Required</HelpBlock>
-                {/*<input*/}
-                {/*  name="expiresOn"*/}
-                {/*  className="form-control"*/}
-                {/*  type="datetime-local"*/}
-                {/*  required*/}
-                {/*/>*/}
               </FormGroup>
-              <FormGroup>
-                <ControlLabel>Choose Task List:</ControlLabel>
-                {this.state.lists && (
-                  <SelectPicker
-                    name="listId"
-                    searchable={false}
-                    block
-                    data={this.state.lists}
-                  ></SelectPicker>
-                )}
-              </FormGroup>
+              {this.state.lists.length > 0 ? (
+                <FormGroup>
+                  <ControlLabel>Choose Task List:</ControlLabel>
+                  <select name="listId">
+                    {this.state.lists.map(list => (
+                      <option value={list.id}>{list.name}</option>
+                    ))}
+                  </select>
+                </FormGroup>
+              ) : null}
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={this.close} appearance="subtle">

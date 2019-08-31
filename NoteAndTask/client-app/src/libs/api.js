@@ -17,7 +17,7 @@ export const request = async (url, method = "get", data) => {
   }
 };
 //Default fetch for GraphQL
-export const graphQl = async data => {
+export const graphQl = async (data) => {
   const response = await fetch("/api/data", {
     method: "POST",
     headers: {
@@ -36,6 +36,7 @@ export const graphQl = async data => {
 };
 
 //Tasks api
+/*
 export const loadTasks = id => {
   if (id) {
     return request("/api/task/get?id=" + id);
@@ -43,3 +44,4 @@ export const loadTasks = id => {
     return request("/api/task/get");
   }
 };
+*/

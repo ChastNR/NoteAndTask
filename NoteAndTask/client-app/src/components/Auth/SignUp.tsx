@@ -1,24 +1,21 @@
-import React from "react";
-import { AuthLayout } from "./layout/AuthLayout";
-import {
-  Button,
-  Content,
-  ControlLabel,
-  FlexboxGrid,
-  Form,
-  FormControl,
-  FormGroup,
-  Panel
-} from "rsuite";
+import * as React from "react";
+import { AuthLayout } from "../layout/AuthLayout";
+import { Button, Content, ControlLabel, FlexboxGrid, Form, FormGroup, Panel } from "rsuite";
 
-export class SignUp extends React.Component {
-  static displayName = SignUp.name;
+interface IRegisterModel {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  passwordCompare: string;
+}
 
-  handleSubmit = async event => {
+export class SignUp extends React.Component<any> {
+  handleSubmit = async (event: any) => {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
-      let formData = {
+      let formData: IRegisterModel = {
         name: event.target.name.value,
         email: event.target.email.value,
         phoneNumber: event.target.phoneNumber.value,
@@ -53,23 +50,23 @@ export class SignUp extends React.Component {
                 <Form fluid id="signInForm" onSubmit={this.handleSubmit}>
                   <FormGroup>
                     <ControlLabel>Name</ControlLabel>
-                    <FormControl type="text" name="name" required />
+                    <input className="rs-input" type="text" name="name" required />
                   </FormGroup>
                   <FormGroup>
                     <ControlLabel>Email address</ControlLabel>
-                    <FormControl type="text" name="email" required />
+                    <input className="rs-input" type="text" name="email" required />
                   </FormGroup>
                   <FormGroup>
                     <ControlLabel>Phone number</ControlLabel>
-                    <FormControl type="text" name="phoneNumber" required />
+                    <input className="rs-input" type="text" name="phoneNumber" required />
                   </FormGroup>
                   <FormGroup>
                     <ControlLabel>Password</ControlLabel>
-                    <FormControl type="text" name="password" required />
+                    <input className="rs-input" type="text" name="password" required />
                   </FormGroup>
                   <FormGroup>
                     <ControlLabel>Confirm password</ControlLabel>
-                    <FormControl type="text" name="passwordCompare" required />
+                    <input className="rs-input" type="text" name="passwordCompare" required />
                   </FormGroup>
                   <div>
                     <FormGroup>

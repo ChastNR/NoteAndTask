@@ -1,18 +1,12 @@
 import React from "react";
-import {
-  Button,
-  ControlLabel,
-  Form,
-  FormControl,
-  FormGroup,
-  HelpBlock,
-  Modal
-} from "rsuite";
+import { Button, ControlLabel, Form, FormGroup, HelpBlock, Modal } from "rsuite";
 
-export class AddListModal extends React.Component {
-  static displayName = AddListModal.name;
+interface IModalWindow {
+  show: boolean
+}
 
-  constructor(props) {
+export class AddListModal extends React.Component<any, IModalWindow> {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -30,7 +24,7 @@ export class AddListModal extends React.Component {
     this.setState({ show: true });
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event: any) => {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
@@ -51,23 +45,23 @@ export class AddListModal extends React.Component {
     return (
       <div className="modal-container">
         <Button color="blue" appearance="ghost" onClick={this.open}>
-          Add new list
+          +
         </Button>
         <Modal show={this.state.show} onHide={this.close}>
-          <Modal.Header>
+          {/* <Modal.Header>
             <Modal.Title>Add new list</Modal.Title>
-          </Modal.Header>
+          </Modal.Header> */}
           <Form fluid onSubmit={this.handleSubmit}>
             <Modal.Body>
               <FormGroup>
                 <ControlLabel>Name:</ControlLabel>
-                <FormControl type="text" name="name" />
+                <input className="rs-input" type="text" name="name" required />
                 <HelpBlock>Required</HelpBlock>
               </FormGroup>
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={this.close} appearance="subtle">
-                Cancel
+                Close
               </Button>
               <Button appearance="primary" type="submit">
                 Add

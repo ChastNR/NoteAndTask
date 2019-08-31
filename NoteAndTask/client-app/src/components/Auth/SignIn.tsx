@@ -1,25 +1,18 @@
-import React from "react";
-import { AuthLayout } from "./layout/AuthLayout";
-import {
-  Button,
-  ButtonToolbar,
-  Content,
-  ControlLabel,
-  FlexboxGrid,
-  Form,
-  FormControl,
-  FormGroup,
-  Panel
-} from "rsuite";
+import * as React from "react";
+import { AuthLayout } from "../layout/AuthLayout";
+import { Button, ButtonToolbar, Content, ControlLabel, FlexboxGrid, Form, FormGroup, Panel } from "rsuite";
 
-export class SignIn extends React.Component {
-  static displayName = SignIn.name;
+interface ILoginModel {
+  login: string;
+  password: string;
+}
 
-  handleSubmit = async event => {
+export class SignIn extends React.Component<any> {
+  handleSubmit = async (event: any) => {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
-      const formData = {
+      const formData: ILoginModel = {
         login: event.target.login.value,
         password: event.target.password.value
       };
@@ -53,11 +46,11 @@ export class SignIn extends React.Component {
                 <Form fluid id="signInForm" onSubmit={this.handleSubmit}>
                   <FormGroup>
                     <ControlLabel>Email or phone number</ControlLabel>
-                    <FormControl type="text" name="login" required />
+                    <input className="rs-input" type="text" name="login" required />
                   </FormGroup>
                   <FormGroup>
                     <ControlLabel>Password</ControlLabel>
-                    <FormControl type="text" name="password" required />
+                    <input className="rs-input" type="text" name="password" required />
                   </FormGroup>
                   <FormGroup>
                     <ButtonToolbar>

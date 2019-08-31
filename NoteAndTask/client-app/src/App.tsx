@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router";
-import { Tasks } from "./components/Tasks";
-import { Archive } from "./components/Archive";
+import { Tasks } from "./components/Tasks/Tasks";
+import { Archive } from "./components/Tasks/Archive";
 import { AuthLayout } from "./components/layout/AuthLayout";
-import { SignIn } from "./components/SignIn";
-import { SignUp } from "./components/SignUp";
-import { Settings } from "./components/Settings";
-import { Notes } from "./components/Notes";
+import { SignIn } from "./components/Auth/SignIn";
+import { SignUp } from "./components/Auth/SignUp";
+import { Settings } from "./components/Auth/Settings";
+import { Notes } from "./components/Notes/Notes";
 import { DashBoard } from "./components/layout/DashBoard";
-import { Lists } from "./components/Lists";
+import { Lists } from "./components/Lists/Lists";
 import "rsuite/dist/styles/rsuite.min.css";
 
 const App: React.FC = () => {
