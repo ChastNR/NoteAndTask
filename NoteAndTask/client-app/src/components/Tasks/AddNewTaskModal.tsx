@@ -26,17 +26,21 @@ export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
   loadLists() {
     request("/api/list/get").then(data => {
       this.setState({ lists: data })
-      console.log(data)
     });
   }
 
   handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    if (event.target.checkValidity()) {
+    if (!event.target.checkValidity()) {
+      event.target.reportValidity();
+    } else {
       let formData;
 
-      if (event.target.listId.value.length === 0) {
+      //event.target.expiresOn.value;
+      
+      
+      if (event.target.listId === undefined) {
         formData = {
           name: event.target.name.value,
           description: event.target.description.value,
@@ -61,11 +65,9 @@ export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
       });
       this.close();
       Alert.info("New task added", 3000);
-    } else {
-      event.target.reportValidity();
     }
   };
-
+  
   render() {
     return (
       <div className="modal-container">
@@ -73,9 +75,6 @@ export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
           +
         </Button>
         <Modal show={this.state.show} onHide={this.close}>
-          {/* <Modal.Header>
-            <Modal.Title>Add new task</Modal.Title>
-          </Modal.Header> */}
           <Form fluid onSubmit={this.handleSubmit}>
             <Modal.Body>
               <FormGroup>
@@ -90,13 +89,14 @@ export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
               </FormGroup>
               <FormGroup>
                 <ControlLabel>Expires on?</ControlLabel>
-                <DatePicker type="datetime-local" format="YYYY-MM-DD HH:mm" required block name="expiresOn" ranges={[
-                  {
-                    label: "Now",
-                    value: new Date()
-                  }
-                ]}
-                />
+                <input type="datetime-local" name="expiresOn" required />
+                {/*<DatePicker type="datetime-local" format="YYYY-MM-DD HH:mm" id="dateField" required block ranges={[*/}
+                {/*  {*/}
+                {/*    label: "Now",*/}
+                {/*    value: new Date()*/}
+                {/*  }*/}
+                {/*]}*/}
+                {/*/>*/}
                 <HelpBlock>Required</HelpBlock>
               </FormGroup>
               {this.state.lists.length > 0 ? (

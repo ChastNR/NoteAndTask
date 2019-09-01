@@ -47,8 +47,7 @@ namespace NoteAndTask
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IListRepository, ListRepository>();
             services.AddTransient<ITaskRepository, TaskRepository>();
-
-
+            
             services.AddDbContext<ApplicationContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));

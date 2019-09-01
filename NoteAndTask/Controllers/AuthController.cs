@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NoteAndTask.Extensions;
+using NoteAndTask.Extensions.EmailSender;
 using NoteAndTask.Models.ViewModels;
 using ProjectModels;
 using Repository.Interface;
+
 namespace NoteAndTask.Controllers
 {
     [Route("api/[controller]")]
@@ -17,10 +19,13 @@ namespace NoteAndTask.Controllers
     {
         private readonly IUserRepository _userRepository;
         private AuthOptions AuthOptions { get; }
-        public AuthController(IUserRepository userRepository, IOptions<AuthOptions> authOptions)
+        private readonly IEmailSender _emailSender;
+        
+        public AuthController(IUserRepository userRepository, IOptions<AuthOptions> authOptions, IEmailSender emailSender)
         {
             _userRepository = userRepository;
             AuthOptions = authOptions.Value;
+            _emailSender = emailSender;
         }
 
         [HttpPost("signin")]
@@ -28,7 +33,7 @@ namespace NoteAndTask.Controllers
         {
             try
             {
-                return !ModelState.IsValid ? (IActionResult)Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})") : Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
+                return !ModelState.IsValid ? (IActionResult)Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})") : Ok(GetToken(_userRepository.AuthUser(model.Login, model.Password).Id));
             }
             catch (Exception e)
             {
@@ -36,36 +41,14 @@ namespace NoteAndTask.Controllers
             }
         }
 
-        #region  Backup
-
-        //        [HttpPost("signin")]
-        //                public IActionResult SignIn([FromBody] LoginViewModel model)
-        //                {
-        //                    if (model.Password != model.ConfirmPassword)
-        //                    {
-        //                        return Json($"Please, check written passwords (password: {model.Password}, password confirm: {model.ConfirmPassword})");
-        //                    }
-        //        
-        //                    if (!ModelState.IsValid)
-        //                    {
-        //                        return Unauthorized($"Please check your login and password (login: {model.Login}, password: {model.Password})");
-        //                    }
-        //                    
-        //                    try
-        //                    {
-        //                      return Ok(GetToken(_userRepository.AuthUser(model.Login).Id));
-        //                    }
-        //                    catch (Exception e)
-        //                    {
-        //                        return Json($"Error: {e}");
-        //                    }
-        //                }
-
-        #endregion
-
         [HttpPost("signup")]
         public IActionResult SignUp([FromBody] RegisterViewModel model)
         {
+            if (_userRepository.UserExist(model.Email, model.PhoneNumber))
+            {
+                return BadRequest("There is another user with the same email or mobile number");
+            }
+            
             try
             {
                 _userRepository.Add(new User
@@ -73,12 +56,10 @@ namespace NoteAndTask.Controllers
                     Name = model.Name,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    PasswordHash = model.Password
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password)
                 });
-
-                return _userRepository.UserExist(model.Email, model.PhoneNumber) != null
-                    ? BadRequest("There is another user with the same email or mobile number")
-                    : (IActionResult)Ok("Success");
+                
+                return Ok("Success");
             }
             catch (Exception e)
             {

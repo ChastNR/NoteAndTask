@@ -32,9 +32,9 @@ export class Tasks extends React.Component<any, ITasks> {
     this.loadTasks(this.props.match.params.id);
   }
 
-  componentWillReceiveProps(newProps: any) {
-    this.loadTasks(newProps.match.params.id);
-  }
+  // componentWillReceiveProps(newProps: any) {
+  //   this.loadTasks(newProps.match.params.id);
+  // }
 
   loadTasks(id?: number) {
     if (id) {

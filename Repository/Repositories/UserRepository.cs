@@ -36,10 +36,10 @@ namespace Repository.Repositories
             return user;
         }
 
-        public User AuthUser(string login)
+        public User AuthUser(string login, string password)
         {
             var user = new User();
-
+            
             using (var connection = new SqlConnection(ConnectionString))
             {
                 const string query = "SELECT * FROM Users WHERE Email = @login OR PhoneNumber = @loginAlt";
@@ -53,16 +53,17 @@ namespace Repository.Repositories
                     while (dataReader.Read())
                     {
                         user.Id = Convert.ToInt32(dataReader["Id"]);
+                        user.PasswordHash = Convert.ToString(dataReader["passwordHash"]);
                     }
                 }
                 connection.Close();
             }
-            return user;
+            return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash) ? user : null;
         }
 
-        public User UserExist(string email, string phoneNumber)
+        public bool UserExist(string email, string phoneNumber)
         {
-            var user = new User();
+            bool userExist = false;
 
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -76,12 +77,12 @@ namespace Repository.Repositories
                 {
                     while (dataReader.Read())
                     {
-                        user.Id = Convert.ToInt32(dataReader["Id"]);
+                        userExist = Convert.ToInt32(dataReader["Id"]) > 0;
                     }
                 }
                 connection.Close();
             }
-            return user;
+            return userExist;
         }
 
         public void Add(User user)

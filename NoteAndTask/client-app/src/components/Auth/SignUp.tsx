@@ -10,8 +10,8 @@ interface IRegisterModel {
   passwordCompare: string;
 }
 
-export class SignUp extends React.Component<any> {
-  handleSubmit = async (event: any) => {
+export const SignUp: React.FC = () => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     if (event.target.checkValidity()) {
@@ -32,7 +32,8 @@ export class SignUp extends React.Component<any> {
         .then(data => {
           if (data) {
             localStorage.setItem("token", data);
-            this.props.history.push("/dashboard");
+            window.location.href = "/dashboard";
+            //this.props.history.push("/dashboard");
           }
         });
     } else {
@@ -40,14 +41,13 @@ export class SignUp extends React.Component<any> {
     }
   };
 
-  render() {
     return (
       <AuthLayout>
         <Content>
           <FlexboxGrid justify="center">
             <FlexboxGrid.Item colspan={12}>
               <Panel className="shadow-box" header={<h3>Sign Up</h3>} bordered>
-                <Form fluid id="signInForm" onSubmit={this.handleSubmit}>
+                <Form fluid id="signInForm" onSubmit={handleSubmit}>
                   <FormGroup>
                     <ControlLabel>Name</ControlLabel>
                     <input className="rs-input" type="text" name="name" required />
@@ -81,6 +81,5 @@ export class SignUp extends React.Component<any> {
           </FlexboxGrid>
         </Content>
       </AuthLayout>
-    );
-  }
-}
+    )
+};

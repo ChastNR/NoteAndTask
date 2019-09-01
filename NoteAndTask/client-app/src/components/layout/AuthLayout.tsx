@@ -26,7 +26,6 @@ const renderAuthPanel: any = () => {
 };
 
 export const AuthLayout: React.FC = (props) => {
-
   return (
     <div>
       <header>
@@ -42,4 +41,4 @@ export const AuthLayout: React.FC = (props) => {
       <div>{props.children}</div>
     </div>
   )
-}
+};

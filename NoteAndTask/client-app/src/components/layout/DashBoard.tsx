@@ -3,12 +3,7 @@ import { Navbar, Nav } from "rsuite";
 import { Link } from "react-router-dom";
 import { Footer } from "./Footer";
 
-export class DashBoard extends React.Component {
-  constructor(props: any) {
-    super(props);
-  }
-
-  render() {
+export const DashBoard: React.FC = (props: any) => {
     return (
       <div>
         <header>
@@ -42,9 +37,8 @@ export class DashBoard extends React.Component {
             </Navbar.Body>
           </Navbar>
         </header>
-        <div className="main-content">{this.props.children}</div>
+        <div className="main-content">{props.children}</div>
         <Footer />
       </div>
     );
-  }
-}
+};

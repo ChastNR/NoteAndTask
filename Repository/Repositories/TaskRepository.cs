@@ -163,7 +163,6 @@ namespace Repository.Repositories
                     command.Parameters.Add("@userId", SqlDbType.Int).Value = Convert.ToInt32(task.UserId);
                     command.Parameters.Add("@expiresOn", SqlDbType.DateTime2).Value = task.ExpiresOn;
 
-                    //command.CommandType = CommandType.Text;
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
