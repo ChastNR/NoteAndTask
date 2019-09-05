@@ -17,6 +17,9 @@ namespace NoteAndTask.Controllers
         [HttpGet("get")]
         public IEnumerable<TaskEntity> Get(int? id, bool archived) => _taskRepository.Get(id, archived, Convert.ToInt32(User.Identity.Name));
 
+        [HttpGet("getall")]
+        public IEnumerable<TaskEntity> GetAll() => _taskRepository.GetAll(Convert.ToInt32(User.Identity.Name));
+
         [HttpPost("add")]
         public IActionResult Add([FromBody] TaskEntity task)
         {
@@ -25,11 +28,11 @@ namespace NoteAndTask.Controllers
                 task.UserId = Convert.ToInt32(User.Identity.Name);
                 _taskRepository.Create(task);
 
-                return Ok("Task added! " + task.Name);
+                return Ok($"Task added! {task.Name}");
             }
             catch (Exception e)
             {
-                return Json("Error: " + e);
+                return Json($"Error: {e}");
             }
         }
 
@@ -38,11 +41,11 @@ namespace NoteAndTask.Controllers
         {
             try
             {
-                return _taskRepository.TaskDone(id) ? (IActionResult)Ok("Task moved to archive successfully") : BadRequest("Cant add task (id: " + id + ") to archive");
+                return _taskRepository.TaskDone(id) ? (IActionResult)Ok("Task moved to archive successfully") : BadRequest($"Cant add task (id: {id}) to archive");
             }
             catch (Exception e)
             {
-                return Json("Error: " + e);
+                return Json($"Error: {e}");
             }
         }
     }

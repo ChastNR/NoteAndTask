@@ -9,7 +9,8 @@ namespace Repository.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
-        private const string ConnectionString = "Server=82.209.241.82;Database=NoneAndTaskDb;User Id=Tihon;Password=4Ayssahar0m;";
+        private const string ConnectionString =
+            "Server=82.209.241.82;Database=NoneAndTaskDb;User Id=Tihon;Password=4Ayssahar0m;";
 
         #region Get
 
@@ -21,6 +22,41 @@ namespace Repository.Repositories
             }
 
             return archived ? GetArchived(userId) : GetDefault(userId);
+        }
+
+        public IEnumerable<TaskEntity> GetAll(int userId)
+        {
+            var tasks = new List<TaskEntity>();
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                const string query = "SELECT * FROM Tasks WHERE UserId = @userId";
+                var command = new SqlCommand(query, connection);
+                command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                connection.Open();
+                using (var dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        tasks.Add(new TaskEntity
+                        {
+                            Id = Convert.ToInt32(dataReader["Id"]),
+                            Name = Convert.ToString(dataReader["Name"]),
+                            Description = Convert.ToString(dataReader["Description"]),
+                            ExpiresOn = Convert.ToDateTime(dataReader["ExpiresOn"]),
+                            IsDone = Convert.ToBoolean(dataReader["IsDone"]),
+                            TaskListId = dataReader["TaskListId"] != DBNull.Value
+                                ? Convert.ToInt32(dataReader["TaskListId"])
+                                : (int?) null
+                        });
+                    }
+                }
+
+                connection.Close();
+            }
+
+            return tasks;
         }
 
         private static IEnumerable<TaskEntity> GetArchived(int userId)
@@ -38,19 +74,20 @@ namespace Repository.Repositories
                 {
                     while (dataReader.Read())
                     {
-                        var task = new TaskEntity
+                        tasks.Add(new TaskEntity
                         {
                             Id = Convert.ToInt32(dataReader["Id"]),
                             Name = Convert.ToString(dataReader["Name"]),
                             Description = Convert.ToString(dataReader["Description"]),
                             ExpiresOn = Convert.ToDateTime(dataReader["ExpiresOn"]),
                             IsDone = Convert.ToBoolean(dataReader["isDone"])
-                        };
-                        tasks.Add(task);
+                        });
                     }
                 }
+
                 connection.Close();
             }
+
             return tasks;
         }
 
@@ -60,7 +97,8 @@ namespace Repository.Repositories
 
             using (var connection = new SqlConnection(ConnectionString))
             {
-                const string query = "SELECT * FROM Tasks WHERE IsDone = 'false' AND TaskListId = @taskListId AND UserId = @userId";
+                const string query =
+                    "SELECT * FROM Tasks WHERE IsDone = 'false' AND TaskListId = @taskListId AND UserId = @userId";
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@taskListId", SqlDbType.Int).Value = taskListId;
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
@@ -70,18 +108,19 @@ namespace Repository.Repositories
                 {
                     while (dataReader.Read())
                     {
-                        var task = new TaskEntity
+                        tasks.Add(new TaskEntity
                         {
                             Id = Convert.ToInt32(dataReader["Id"]),
                             Name = Convert.ToString(dataReader["Name"]),
                             Description = Convert.ToString(dataReader["Description"]),
                             ExpiresOn = Convert.ToDateTime(dataReader["ExpiresOn"])
-                        };
-                        tasks.Add(task);
+                        });
                     }
                 }
+
                 connection.Close();
             }
+
             return tasks;
         }
 
@@ -91,7 +130,8 @@ namespace Repository.Repositories
 
             using (var connection = new SqlConnection(ConnectionString))
             {
-                const string query = "SELECT * FROM Tasks WHERE IsDone = 'false' AND TaskListId IS NULL AND UserId = @userId";
+                const string query =
+                    "SELECT * FROM Tasks WHERE IsDone = 'false' AND TaskListId IS NULL AND UserId = @userId";
 
                 var command = new SqlCommand(query, connection);
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
@@ -101,18 +141,19 @@ namespace Repository.Repositories
                 {
                     while (dataReader.Read())
                     {
-                        var task = new TaskEntity
+                        tasks.Add(new TaskEntity
                         {
                             Id = Convert.ToInt32(dataReader["Id"]),
                             Name = Convert.ToString(dataReader["Name"]),
                             Description = Convert.ToString(dataReader["Description"]),
                             ExpiresOn = Convert.ToDateTime(dataReader["ExpiresOn"])
-                        };
-                        tasks.Add(task);
+                        });
                     }
                 }
+
                 connection.Close();
             }
+
             return tasks;
         }
 
@@ -132,7 +173,8 @@ namespace Repository.Repositories
 
         private static void CreateWithListId(TaskEntity task)
         {
-            const string query = "INSERT INTO Tasks (Name, Description, ExpiresOn, IsDone, UserId, TaskListId) VALUES (@name, @description, @expiresOn, 'false' , @userId, @taskListId)";
+            const string query =
+                "INSERT INTO Tasks (Name, Description, ExpiresOn, IsDone, UserId, TaskListId) VALUES (@name, @description, @expiresOn, 'false' , @userId, @taskListId)";
             using (var connection = new SqlConnection(ConnectionString))
             {
                 using (var command = new SqlCommand(query, connection))
@@ -153,7 +195,8 @@ namespace Repository.Repositories
 
         private static void CreateWithoutListId(TaskEntity task)
         {
-            const string query = "INSERT INTO Tasks (Name, Description, ExpiresOn, IsDone, UserId) VALUES (@name, @description, @expiresOn ,'false', @userId)";
+            const string query =
+                "INSERT INTO Tasks (Name, Description, ExpiresOn, IsDone, UserId) VALUES (@name, @description, @expiresOn ,'false', @userId)";
             using (var connection = new SqlConnection(ConnectionString))
             {
                 using (var command = new SqlCommand(query, connection))
@@ -191,6 +234,7 @@ namespace Repository.Repositories
                     connection.Close();
                 }
             }
+
             return done;
         }
 

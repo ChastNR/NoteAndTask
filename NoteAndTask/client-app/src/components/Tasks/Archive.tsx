@@ -4,34 +4,27 @@ import { DashBoard } from "../layout/DashBoard";
 
 import { ITask } from "../../interfaces/ITask";
 import { Task } from "./Task";
+import { observer, inject } from "mobx-react";
 
 interface ITasks {
   tasks: ITask[];
 }
 
+@inject('tasksStore')
+@observer
 export class Archive extends React.Component<any, ITasks> {
   constructor(props: any) {
     super(props);
 
-    this.state = {
-      tasks: []
-    };
-
-    this.loadTasks();
-  }
-
-  loadTasks() {
-    request("/api/task/get?archived=true").then(data => {
-      this.setState({ tasks: data } as ITasks);
-    });
+    this.props.tasksStore.loadTasks();
   }
 
   render() {
     return (
       <DashBoard>
-        {this.state.tasks && (
+        {this.props.tasksStore.archiveState && (
           <div>
-            {this.state.tasks.map(task => (
+            {this.props.tasksStore.archiveState.map((task: ITask) => (
               <Task task={task} />
             ))}
           </div>

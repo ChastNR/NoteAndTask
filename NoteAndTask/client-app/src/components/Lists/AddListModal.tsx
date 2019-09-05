@@ -1,10 +1,14 @@
 import React from "react";
 import { Button, ControlLabel, Form, FormGroup, HelpBlock, Modal } from "rsuite";
+import { observer, inject } from "mobx-react";
+import { thisTypeAnnotation } from "@babel/types";
 
 interface IModalWindow {
   show: boolean
 }
 
+@inject('applicationStore')
+@observer
 export class AddListModal extends React.Component<any, IModalWindow> {
   constructor(props: any) {
     super(props);
@@ -36,6 +40,7 @@ export class AddListModal extends React.Component<any, IModalWindow> {
         }
       });
       this.close();
+      this.props.applicationStore.loadLists();
     } else {
       event.target.reportValidity();
     }

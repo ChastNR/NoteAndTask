@@ -26,12 +26,11 @@ namespace Repository.Repositories
                 {
                     while (dataReader.Read())
                     {
-                        var list = new TaskList
+                        lists.Add(new TaskList
                         {
                             Id = Convert.ToInt32(dataReader["Id"]),
                             Name = Convert.ToString(dataReader["Name"])
-                        };
-                        lists.Add(list);
+                        });
                     }
                 }
                 connection.Close();

@@ -21,10 +21,10 @@ namespace NoteAndTask.Controllers
         public IActionResult Add(string name)
         {
             if (string.IsNullOrEmpty(name))
-                return BadRequest("Cant add list with empty name " + name);
+                return BadRequest($"Cant add list with empty name {name}");
 
             return _listRepository.Add(name, Convert.ToInt32(User.Identity.Name))
-                ? (IActionResult)Ok("Task list " + name + " added!")
+                ? (IActionResult)Ok($"Task list {name} added!")
                 : BadRequest("Task list not added");
         }
 
@@ -33,11 +33,11 @@ namespace NoteAndTask.Controllers
         {
             try
             {
-                return _listRepository.Delete(id) ? (IActionResult)Ok("List removed successfully!") : BadRequest("There is no list with id: " + id);
+                return _listRepository.Delete(id) ? (IActionResult)Ok("List removed successfully!") : BadRequest($"There is no list with id: {id}");
             }
             catch (Exception e)
             {
-                return Json("Error: " + e);
+                return Json($"Error: {e}");
             }
         }
     }
