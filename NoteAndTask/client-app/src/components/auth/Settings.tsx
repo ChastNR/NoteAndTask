@@ -9,7 +9,7 @@ import { observer, inject } from "mobx-react";
 export class Settings extends React.Component<any, IUser> {
   constructor(props: any) {
     super(props);
-    if (!!!this.props.userStore.name || this.props.userStore.email || this.props.userStore.phoneNumber) {
+    if (!this.props.userStore.name || this.props.userStore.email || this.props.userStore.phoneNumber) {
       this.props.userStore.getUser();
     }
   }

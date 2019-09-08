@@ -8,7 +8,7 @@ interface ITaskModalWindow {
   show: boolean
 }
 
-@inject('applicationStore')
+@inject('tasksStore', 'listsStore')
 @observer
 export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
   constructor(props: any) {
@@ -61,7 +61,7 @@ export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
       });
       this.close();
 
-      this.props.applicationStore.loadTasks();
+      this.props.tasksStore.loadTasks();
 
       Alert.info("New task added", 3000);
     }
@@ -98,11 +98,11 @@ export class AddNewTaskModal extends React.Component<any, ITaskModalWindow> {
                 {/*/>*/}
                 <HelpBlock>Required</HelpBlock>
               </FormGroup>
-              {this.props.applicationStore.lists.length > 0 ? (
+              {this.props.listsStore.lists.length > 0 ? (
                 <FormGroup>
                   <ControlLabel>Choose Task List:</ControlLabel>
                   <select name="listId">
-                    {this.props.applicationStore.lists.map((list: any) => (
+                    {this.props.listsStore.lists.map((list: any) => (
                       <option value={list.id}>{list.name}</option>
                     ))}
                   </select>

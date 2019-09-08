@@ -7,7 +7,7 @@ interface IModalWindow {
   show: boolean
 }
 
-@inject('applicationStore')
+@inject('listsStore')
 @observer
 export class AddListModal extends React.Component<any, IModalWindow> {
   constructor(props: any) {
@@ -40,7 +40,7 @@ export class AddListModal extends React.Component<any, IModalWindow> {
         }
       });
       this.close();
-      this.props.applicationStore.loadLists();
+      this.props.listsStore.loadLists();
     } else {
       event.target.reportValidity();
     }
